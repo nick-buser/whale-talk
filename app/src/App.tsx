@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Chrome } from './components/Chrome'
+import { TweaksPanel } from './components/TweaksPanel'
+import { TweaksProvider } from './lib/tweaks'
 import { ActHero } from './acts/ActHero'
 import { ActSpectrum } from './acts/ActSpectrum'
 import { ActRange } from './acts/ActRange'
@@ -15,9 +17,10 @@ import { whaleAudio } from './lib/audio'
 
 const ACT_IDS = ['hero', 'spectrum', 'range', 'anatomy', 'coda', 'dsl', 'network', 'humpback', 'zipf', 'brain', 'gap']
 
-export default function App() {
+function AppInner() {
   const [activeAct, setActiveAct] = useState('hero')
   const [audioOn, setAudioOn] = useState(false)
+  const [tweaksOpen, setTweaksOpen] = useState(false)
 
   // Scrollspy
   useEffect(() => {
@@ -33,6 +36,19 @@ export default function App() {
     window.addEventListener('scroll', onScroll, { passive: true })
     onScroll()
     return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  // Backtick shortcut to toggle tweaks panel
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === '`' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        const tag = (e.target as HTMLElement).tagName
+        if (tag === 'INPUT' || tag === 'TEXTAREA') return
+        setTweaksOpen(prev => !prev)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
   }, [])
 
   // Audio resume on first user interaction
@@ -60,7 +76,14 @@ export default function App() {
 
   return (
     <>
-      <Chrome activeAct={activeAct} audioOn={audioOn} onAudioToggle={handleAudioToggle} />
+      <Chrome
+        activeAct={activeAct}
+        audioOn={audioOn}
+        onAudioToggle={handleAudioToggle}
+        tweaksOpen={tweaksOpen}
+        onTweaksToggle={() => setTweaksOpen(prev => !prev)}
+      />
+      <TweaksPanel open={tweaksOpen} onClose={() => setTweaksOpen(false)} />
       <main style={{ paddingTop: 64 }}>
         <ActHero />
         <ActSpectrum />
@@ -75,5 +98,13 @@ export default function App() {
         <ActGap />
       </main>
     </>
+  )
+}
+
+export default function App() {
+  return (
+    <TweaksProvider>
+      <AppInner />
+    </TweaksProvider>
   )
 }
