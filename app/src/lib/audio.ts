@@ -40,7 +40,7 @@ interface DroneNodes {
 class WhaleAudio {
   private ctx: AudioContext | null = null
   private masterGain: GainNode | null = null
-  private masterMuted = false
+  private masterMuted = true
   private masterVolume = 0.6
   private droneNodes: DroneNodes | null = null
 
