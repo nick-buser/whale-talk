@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sounding the deep — an interactive essay on whale communication</title>
+
+<link rel="stylesheet" href="lib/colors_and_type.css">
+<link rel="stylesheet" href="style.css">
+
+<!-- D3, CodeMirror 6 (bundled UMD), anime.js — pinned -->
+<script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://unpkg.com/animejs@3.2.2/lib/anime.min.js"></script>
+
+<!-- React 18 + Babel — exact pinned versions w/ integrity -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- Audio engine (vanilla JS, loaded before React) -->
+<script src="audio.js"></script>
+</head>
+<body>
+
+<!-- Top chrome -->
+<header class="chrome" id="chrome">
+  <a href="#hero" class="brand"><img src="assets/mark.svg" alt="Sounding"></a>
+  <nav class="nav" id="nav">
+    <a data-act="hero" class="active">Surface</a>
+    <a data-act="spectrum">Voices</a>
+    <a data-act="range">Range</a>
+    <a data-act="anatomy">Anatomy</a>
+    <a data-act="coda">Codas</a>
+    <a data-act="dsl">Score</a>
+    <a data-act="network">Network</a>
+    <a data-act="humpback">Song</a>
+    <a data-act="zipf">Zipf</a>
+    <a data-act="brain">Brain</a>
+    <a data-act="gap">Gap</a>
+  </nav>
+  <button class="badge off" id="audio-toggle">
+    <span class="lbl">Audio</span>
+  </button>
+</header>
+
+<main id="root"></main>
+
+<!-- Section components (split for editability) -->
+<script type="text/babel" src="components/common.jsx"></script>
+<script type="text/babel" src="components/data.jsx"></script>
+<script type="text/babel" src="components/act-hero.jsx"></script>
+<script type="text/babel" src="components/act-spectrum.jsx"></script>
+<script type="text/babel" src="components/act-range.jsx"></script>
+<script type="text/babel" src="components/act-anatomy.jsx"></script>
+<script type="text/babel" src="components/act-coda.jsx"></script>
+<script type="text/babel" src="components/act-dsl.jsx"></script>
+<script type="text/babel" src="components/act-network.jsx"></script>
+<script type="text/babel" src="components/act-humpback.jsx"></script>
+<script type="text/babel" src="components/act-zipf.jsx"></script>
+<script type="text/babel" src="components/act-brain.jsx"></script>
+<script type="text/babel" src="components/act-gap.jsx"></script>
+<script type="text/babel" src="lib/tweaks-panel.jsx"></script>
+<script type="text/babel" src="components/app.jsx"></script>
+
+</body>
+</html>
