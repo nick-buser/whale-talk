@@ -167,7 +167,7 @@ export function ActCoda() {
           <CodaPlayer coda={coda} autoplay={false}/>
         </div>
 
-        <div style={{ marginTop: 64, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+        <div className="stat-grid">
           <div className="panel">
             <div className="bignum">{coda.intervals.length + 1}<span className="unit">clicks</span></div>
             <p className="small" style={{ marginTop: 8 }}>per single utterance — the unit of the coda alphabet.</p>

@@ -21,7 +21,7 @@ function HumpbackTree({ song, playhead, selected, onPlay }: {
 }) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const size = useSize(wrapRef)
-  const W = Math.max(840, size.w)
+  const W = Math.max(560, size.w)
   const H = 460
   const pad = { l: 16, r: 16, t: 28, b: 16 }
   const innerW = W - pad.l - pad.r
@@ -259,12 +259,14 @@ export function ActHumpback() {
               </span>
             )}
           </div>
-          <HumpbackTree
-            song={HUMP_SONG_ANN}
-            playhead={playheadT}
-            selected={selected}
-            setSelected={setSelected}
-            onPlay={play}/>
+          <div className="chart-scroll">
+            <HumpbackTree
+              song={HUMP_SONG_ANN}
+              playhead={playheadT}
+              selected={selected}
+              setSelected={setSelected}
+              onPlay={play}/>
+          </div>
         </div>
 
         <div className="split-2" style={{ marginTop: 56 }}>

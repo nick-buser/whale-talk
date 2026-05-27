@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { BRAINS } from '../lib/data'
+import { useSize } from '../lib/hooks'
 import type { Brain } from '../lib/schemas'
 import { Eyebrow } from '../components/Eyebrow'
 import { Chip } from '../components/Chip'
@@ -103,8 +104,10 @@ export function ActBrain() {
   const [selected, setSelected] = useState('sperm')
   const sel = BRAINS.find(b => b.id === selected)!
 
+  const panelRef = useRef<HTMLDivElement>(null)
+  const panelSize = useSize(panelRef)
   const maxLen = Math.max(...BRAINS.map(b => b.length))
-  const containerW = 900
+  const containerW = panelSize.w || 900
   const sharedScale = (containerW * 0.62) / maxLen
   const normScale = (b: Brain) => 280 / b.length
 
@@ -124,7 +127,7 @@ export function ActBrain() {
           <Chip active={!actualScale} onClick={() => setActualScale(false)}>Equal size · shape only</Chip>
         </div>
 
-        <div className="panel panel--lumen" style={{ padding: 28 }}>
+        <div ref={panelRef} className="panel panel--lumen" style={{ padding: 28 }}>
           <span className="corner mono">FIG. 06 · cetacean encephala · lateral</span>
           <div style={{
             display: 'flex', alignItems: 'flex-end', justifyContent: 'space-evenly',

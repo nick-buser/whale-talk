@@ -12,7 +12,7 @@ function RangeChart({ marker, setMarker, selected, setSelected }: {
 }) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const size = useSize(wrapRef)
-  const W = Math.max(820, size.w)
+  const W = Math.max(560, size.w)
   const H = 540
   const m = { top: 70, right: 40, bottom: 110, left: 80 }
 
@@ -181,7 +181,9 @@ export function ActRange() {
 
         <div className="panel panel--lumen" style={{ padding: 20, marginTop: 32 }}>
           <span className="corner mono">FIG. 02 · effective communication range · drag the marker</span>
-          <RangeChart marker={marker} setMarker={setMarker} selected={selected} setSelected={setSelected} />
+          <div className="chart-scroll">
+            <RangeChart marker={marker} setMarker={setMarker} selected={selected} setSelected={setSelected} />
+          </div>
         </div>
 
         <div className="split-12-1" style={{ marginTop: 40, gap: 48 }}>
