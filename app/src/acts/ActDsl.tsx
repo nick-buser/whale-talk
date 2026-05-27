@@ -1,7 +1,8 @@
-import { useState, useMemo, useCallback, useRef, useEffect } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { DSL_DEFAULT, CODA_MODIFIERS } from '../lib/data'
 import { whaleAudio } from '../lib/audio'
 import { Eyebrow } from '../components/Eyebrow'
+import { CodaEditor } from '../components/CodaEditor'
 
 /* ── Tokenizer ─────────────────────────────────────────── */
 interface Token { t: string; v: string }
@@ -60,7 +61,6 @@ function parseScore(text: string): { codas: ParsedCoda[]; defaultIci: number } {
     if (nonws[0].t === 'ident' && nonws[1] && nonws[1].t === 'colon') {
       const name = nonws[0].v
       const body = nonws.slice(2)
-
       const clicks: boolean[] = []
       const gaps: (number | null)[] = []
       let lastGap: number | null = null
@@ -88,139 +88,11 @@ function parseScore(text: string): { codas: ParsedCoda[]; defaultIci: number } {
         const scale = 1 + (-r) * (frac - 0.5) * 2
         return g * scale * mods.tempo
       })
-      if (mods.ornament) {
-        intervals.push(Math.max(0.05, defaultIci * 0.4 * mods.tempo))
-      }
+      if (mods.ornament) intervals.push(Math.max(0.05, defaultIci * 0.4 * mods.tempo))
       codas.push({ lineIdx: idx, name, intervals, mods })
     }
   })
   return { codas, defaultIci }
-}
-
-/* ── Color per token ─────────────────────────────────────── */
-function colorFor(tt: string): string {
-  switch (tt) {
-    case 'comment': return '#5b82b8'
-    case 'click':   return '#c6ffe6'
-    case 'gap':     return '#ffb472'
-    case 'num':     return '#ffb472'
-    case 'kw':      return '#4afdc6'
-    case 'mod':     return '#4afdc6'
-    case 'colon':   return '#b6c8df'
-    case 'ident':   return '#eef3fa'
-    default:        return '#b6c8df'
-  }
-}
-
-function HighlightedLine({ line }: { line: string }) {
-  if (line === '') return <span> </span>
-  const tokens = tokenize(line)
-  return (
-    <>
-      {tokens.map((t, i) => (
-        <span key={i} style={{
-          color: colorFor(t.t),
-          fontWeight: t.t === 'click' || t.t === 'kw' ? 500 : 400,
-          textShadow: t.t === 'click' ? '0 0 8px #4afdc6' : 'none',
-        }}>{t.v}</span>
-      ))}
-    </>
-  )
-}
-
-function CodaEditor({ text, onChange, onPlayLine, activeLine }: {
-  text: string
-  onChange: (v: string) => void
-  onPlayLine: (lineIdx: number) => void
-  activeLine: number
-}) {
-  const taRef = useRef<HTMLTextAreaElement>(null)
-  const preRef = useRef<HTMLPreElement>(null)
-  const lines = text.split('\n')
-
-  const onScroll = () => {
-    if (!taRef.current || !preRef.current) return
-    preRef.current.scrollTop = taRef.current.scrollTop
-    preRef.current.scrollLeft = taRef.current.scrollLeft
-  }
-
-  const clickable = useMemo(() => {
-    const set = new Set<number>()
-    parseScore(text).codas.forEach(c => set.add(c.lineIdx))
-    return set
-  }, [text])
-
-  return (
-    <div style={{
-      position: 'relative',
-      background: 'var(--abyss-deep)',
-      border: '1px solid var(--line)',
-      borderRadius: 6,
-      overflow: 'hidden',
-    }}>
-      <div style={{
-        position: 'absolute', top: 0, left: 0, bottom: 0, width: 56,
-        borderRight: '1px solid var(--line)',
-        background: 'color-mix(in oklch, var(--abyss-ink) 60%, transparent)',
-        zIndex: 2,
-      }}>
-        {lines.map((_, i) => (
-          <div key={i} style={{
-            height: 24, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            padding: '0 6px',
-            fontFamily: 'var(--font-mono)', fontSize: 11,
-            color: i === activeLine ? 'var(--lumen)' : 'var(--shoal)',
-          }}>
-            <span>{i+1}</span>
-            {clickable.has(i) ? (
-              <button onClick={() => onPlayLine(i)}
-                title="Play this coda"
-                style={{
-                  width: 16, height: 16, border: '1px solid var(--lumen)',
-                  borderRadius: '50%', background: i === activeLine ? 'var(--lumen)' : 'transparent',
-                  color: i === activeLine ? 'var(--lumen-ink)' : 'var(--lumen)',
-                  cursor: 'pointer', padding: 0,
-                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 8, lineHeight: '1',
-                }}>►</button>
-            ) : null}
-          </div>
-        ))}
-      </div>
-
-      <pre ref={preRef} aria-hidden="true" style={{
-        position: 'absolute', top: 0, left: 56, right: 0, bottom: 0,
-        margin: 0, padding: '0 14px',
-        fontFamily: 'var(--font-mono)', fontSize: 13.5, lineHeight: '24px',
-        color: 'transparent',
-        background: 'transparent',
-        whiteSpace: 'pre',
-        overflow: 'auto',
-        pointerEvents: 'none',
-      }}>
-        {lines.map((line, i) => (
-          <div key={i} style={{
-            background: i === activeLine ? 'color-mix(in oklch, var(--lumen) 10%, transparent)' : 'transparent',
-          }}>
-            <HighlightedLine line={line}/>
-          </div>
-        ))}
-      </pre>
-
-      <textarea ref={taRef} value={text} onChange={(e) => onChange(e.target.value)}
-        onScroll={onScroll}
-        spellCheck={false}
-        style={{
-          position: 'relative', display: 'block',
-          width: '100%', height: 440,
-          margin: 0, padding: '0 14px 0 70px',
-          fontFamily: 'var(--font-mono)', fontSize: 13.5, lineHeight: '24px',
-          color: 'transparent', caretColor: 'var(--lumen)',
-          background: 'transparent', border: 0, outline: 'none', resize: 'vertical',
-          whiteSpace: 'pre', overflowWrap: 'normal', overflow: 'auto',
-        }}/>
-    </div>
-  )
 }
 
 export function ActDsl() {
@@ -250,7 +122,7 @@ export function ActDsl() {
 
   const playAll = useCallback(() => {
     let delay = 0
-    codas.forEach((c) => {
+    codas.forEach(c => {
       setTimeout(() => playLine(c.lineIdx), delay)
       delay += (c.intervals.reduce((s, v) => s+v, 0) + 0.5) * 1000
     })
