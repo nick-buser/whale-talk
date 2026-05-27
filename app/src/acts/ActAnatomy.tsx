@@ -98,7 +98,7 @@ function AnatomyDiagram({ which, hovered, setHovered }: {
   const [pulseRunning, setPulseRunning] = useState(false)
   const wrapRef = useRef<HTMLDivElement>(null)
   const size = useSize(wrapRef)
-  const W = Math.max(720, size.w)
+  const W = size.w || 720
   const H = (vbH / vbW) * W
   const svgRef = useRef<SVGSVGElement>(null)
 

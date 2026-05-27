@@ -12,7 +12,7 @@ function ZipfChart({ active, hovered, setHovered }: {
 }) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const size = useSize(wrapRef)
-  const W = Math.max(680, size.w)
+  const W = Math.max(400, size.w)
   const H = 460
   const m = { top: 30, right: 30, bottom: 60, left: 70 }
 
@@ -109,7 +109,7 @@ function ZipfChart({ active, hovered, setHovered }: {
 function EntropyChart({ highlight }: { highlight: string }) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const size = useSize(wrapRef)
-  const W = Math.max(580, size.w)
+  const W = Math.max(400, size.w)
   const H = 320
   const m = { top: 24, right: 100, bottom: 50, left: 50 }
   const lagsN = ENTROPY_BY_LAG[0].lags.length
