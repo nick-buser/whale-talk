@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { Chrome } from './components/Chrome'
 import { TweaksPanel } from './components/TweaksPanel'
 import { TweaksProvider } from './lib/tweaks'
@@ -7,7 +7,7 @@ import { ActSpectrum } from './acts/ActSpectrum'
 import { ActRange } from './acts/ActRange'
 import { ActAnatomy } from './acts/ActAnatomy'
 import { ActCoda } from './acts/ActCoda'
-import { ActDsl } from './acts/ActDsl'
+const ActDsl = lazy(() => import('./acts/ActDsl').then(m => ({ default: m.ActDsl })))
 import { ActNetwork } from './acts/ActNetwork'
 import { ActHumpback } from './acts/ActHumpback'
 import { ActZipf } from './acts/ActZipf'
@@ -90,7 +90,7 @@ function AppInner() {
         <ActRange />
         <ActAnatomy />
         <ActCoda />
-        <ActDsl />
+        <Suspense fallback={null}><ActDsl /></Suspense>
         <ActNetwork />
         <ActHumpback />
         <ActZipf />
