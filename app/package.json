@@ -9,16 +9,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@codemirror/commands": "^6.3.3",
+    "@codemirror/language": "^6.10.2",
+    "@codemirror/lint": "^6.9.6",
+    "@codemirror/state": "^6.4.1",
+    "@codemirror/view": "^6.26.3",
+    "@uiw/codemirror-theme-dracula": "^4.23.0",
+    "animejs": "^3.2.2",
+    "d3": "^7.9.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "d3": "^7.9.0",
-    "animejs": "^3.2.2",
-    "zod": "^3.22.4",
-    "@codemirror/view": "^6.26.3",
-    "@codemirror/state": "^6.4.1",
-    "@codemirror/language": "^6.10.2",
-    "@codemirror/commands": "^6.3.3",
-    "@uiw/codemirror-theme-dracula": "^4.23.0"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/animejs": "^3.1.12",

@@ -11,6 +11,107 @@ import {
 import { defaultKeymap, history, historyKeymap } from '@codemirror/commands'
 import { StreamLanguage, HighlightStyle, syntaxHighlighting } from '@codemirror/language'
 import { tags } from '@lezer/highlight'
+import { linter } from '@codemirror/lint'
+import type { Diagnostic } from '@codemirror/lint'
+
+/* ── Position-aware tokenizer (used by linter) ─────────── */
+interface Tok { t: string; v: string; pos: number }
+
+function tokenizeWithPos(line: string): Tok[] {
+  const out: Tok[] = []
+  let i = 0
+  while (i < line.length) {
+    const c = line[i], pos = i
+    if (c === '#') { out.push({ t: 'comment', v: line.slice(i), pos }); return out }
+    if (/\s/.test(c)) { let j = i; while (j < line.length && /\s/.test(line[j])) j++; out.push({ t: 'ws', v: line.slice(i, j), pos }); i = j; continue }
+    if (c === '•' || c === '.') { out.push({ t: 'click', v: c, pos }); i++; continue }
+    if (c === '|') { let j = i; while (line[j] === '|') j++; out.push({ t: 'gap', v: line.slice(i, j), pos }); i = j; continue }
+    if (c === ':' || c === '=') { out.push({ t: 'colon', v: c, pos }); i++; continue }
+    if (c === '*' || c === '~') { let j = i+1; while (j < line.length && /[-\d.]/.test(line[j])) j++; out.push({ t: 'mod', v: line.slice(i, j), pos }); i = j; continue }
+    if (c === '+') { let j = i; while (j < line.length && line[j] !== ' ' && line[j] !== '#') j++; out.push({ t: 'mod', v: line.slice(i, j), pos }); i = j; continue }
+    if (c === '!') { out.push({ t: 'mod', v: '!', pos }); i++; continue }
+    if (/[0-9]/.test(c)) { let j = i+1; while (j < line.length && /[0-9.]/.test(line[j])) j++; out.push({ t: 'num', v: line.slice(i, j), pos }); i = j; continue }
+    if (/[a-z]/i.test(c)) {
+      let j = i+1; while (j < line.length && /[a-z0-9_]/i.test(line[j])) j++
+      const w = line.slice(i, j).toLowerCase()
+      out.push({ t: ['tempo','ornament'].includes(w) ? 'kw' : 'ident', v: line.slice(i, j), pos })
+      i = j; continue
+    }
+    out.push({ t: 'unknown', v: c, pos }); i++
+  }
+  return out
+}
+
+/* ── DSL linter ─────────────────────────────────────────── */
+function codaLinter(view: EditorView): Diagnostic[] {
+  const diags: Diagnostic[] = []
+  const seen = new Map<string, number>()
+
+  for (let n = 1; n <= view.state.doc.lines; n++) {
+    const { from, text } = view.state.doc.line(n)
+    if (!text.trim() || text.trim().startsWith('#')) continue
+
+    const toks = tokenizeWithPos(text)
+    const nws = toks.filter(t => t.t !== 'ws' && t.t !== 'comment')
+    if (!nws.length) continue
+
+    const span = (t: Tok) => ({ from: from + t.pos, to: from + t.pos + t.v.length })
+
+    // tempo directive
+    if (nws[0].t === 'kw' && nws[0].v.toLowerCase() === 'tempo') {
+      const num = nws[1]
+      if (!num || num.t !== 'num') {
+        diags.push({ ...span(nws[0]), severity: 'error', message: 'tempo requires a positive number (e.g. tempo 200)' })
+      } else if (parseFloat(num.v) <= 0) {
+        diags.push({ ...span(num), severity: 'error', message: `tempo must be a positive number, got ${num.v}` })
+      }
+      continue
+    }
+
+    // coda definition
+    if (nws[0].t === 'ident' && nws[1]?.t === 'colon') {
+      const name = nws[0].v.toLowerCase()
+      if (seen.has(name)) {
+        diags.push({ ...span(nws[0]), severity: 'error', message: `duplicate coda name "${nws[0].v}" (already defined at line ${seen.get(name)})` })
+      } else {
+        seen.set(name, n)
+      }
+
+      const body = nws.slice(2)
+      if (!body.some(t => t.t === 'click')) {
+        diags.push({ from: from + nws[1].pos, to: from + text.length, severity: 'warning', message: `coda "${nws[0].v}" has no clicks — add • or .` })
+      }
+
+      for (let k = 0; k < body.length; k++) {
+        const t = body[k]
+        if (t.t !== 'mod') continue
+        if (t.v.startsWith('*')) {
+          const val = parseFloat(t.v.slice(1))
+          if (isNaN(val) || val <= 0)
+            diags.push({ ...span(t), severity: 'error', message: `tempo modifier must be a positive number (e.g. *0.55 or *1.7)` })
+        } else if (t.v.startsWith('~')) {
+          const val = parseFloat(t.v.slice(1))
+          if (isNaN(val))
+            diags.push({ ...span(t), severity: 'error', message: `rubato modifier requires a number (e.g. ~0.6 or ~-0.4)` })
+          else if (Math.abs(val) > 1)
+            diags.push({ ...span(t), severity: 'warning', message: `rubato ${val} is unusually large — typical range is -1 to 1` })
+        } else if (t.v === '!') {
+          const next = body[k + 1]
+          if (!next || next.t !== 'num' || parseInt(next.v, 10) < 1)
+            diags.push({ ...span(t), severity: 'error', message: 'ictus ! must be followed by a click index (e.g. ! 3)' })
+        }
+      }
+      continue
+    }
+
+    // line starts with something unrecognised
+    if (nws[0].t !== 'kw') {
+      diags.push({ ...span(nws[0]), severity: 'warning', message: `unexpected token "${nws[0].v}" — lines should start with a coda name or "tempo"` })
+    }
+  }
+
+  return diags
+}
 
 /* ── Playable-line detection ────────────────────────────── */
 const KEYWORDS = new Set(['tempo', 'ornament'])
@@ -122,6 +223,14 @@ const codaTheme = EditorView.theme({
     background: 'rgba(74,253,198,0.15)',
   },
   '&.cm-focused': { outline: 'none' },
+  // lint tooltips
+  '.cm-tooltip.cm-tooltip-lint': {
+    background: 'var(--abyss-ink)', border: '1px solid var(--line)',
+    borderRadius: '4px', padding: '2px 0',
+  },
+  '.cm-diagnostic': { fontFamily: 'var(--font-mono)', fontSize: '12px', padding: '4px 10px' },
+  '.cm-diagnostic-error': { borderLeft: '3px solid #ff6b6b' },
+  '.cm-diagnostic-warning': { borderLeft: '3px solid #ffb472' },
 }, { dark: true })
 
 /* ── Play-button gutter ─────────────────────────────────── */
@@ -215,6 +324,7 @@ export function CodaEditor({ text, onChange, onPlayLine, activeLine }: {
     activeLineField,
     lineNumbers(),
     makePlayGutter(onPlayLineRef),
+    linter(codaLinter, { delay: 400 }),
     EditorView.updateListener.of(update => {
       if (update.docChanged) onChangeRef.current(update.state.doc.toString())
     }),
