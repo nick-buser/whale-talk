@@ -2,21 +2,7 @@ import { useState, useMemo, useCallback } from 'react'
 import { CODAS, CODA_MODIFIERS } from '../lib/data'
 import { whaleAudio } from '../lib/audio'
 import { Eyebrow } from '../components/Eyebrow'
-
-/* ── Apply the four CETI modifiers to a base interval array ─ */
-function applyMods(base: number[], tempo: number, rubato: number, ornament: boolean): number[] {
-  const n = base.length
-  const out = base.map((g, i) => {
-    const frac = n <= 1 ? 0.5 : i / (n - 1)
-    const scale = 1 + (-rubato) * (frac - 0.5) * 2
-    return g * scale * tempo
-  })
-  if (ornament) {
-    const avg = base.reduce((s, v) => s + v, 0) / n
-    out.push(Math.max(0.05, avg * 0.4 * tempo))
-  }
-  return out
-}
+import { applyMods } from '../lib/coda-dsl'
 
 /* ── Live coda timeline ──────────────────────────────────── */
 function Timeline({ intervals, baseClicks, ictus, tick }: {

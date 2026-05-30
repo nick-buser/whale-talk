@@ -13,34 +13,8 @@ import { StreamLanguage, HighlightStyle, syntaxHighlighting } from '@codemirror/
 import { tags } from '@lezer/highlight'
 import { linter } from '@codemirror/lint'
 import type { Diagnostic } from '@codemirror/lint'
-
-/* ── Position-aware tokenizer (used by linter) ─────────── */
-interface Tok { t: string; v: string; pos: number }
-
-function tokenizeWithPos(line: string): Tok[] {
-  const out: Tok[] = []
-  let i = 0
-  while (i < line.length) {
-    const c = line[i], pos = i
-    if (c === '#') { out.push({ t: 'comment', v: line.slice(i), pos }); return out }
-    if (/\s/.test(c)) { let j = i; while (j < line.length && /\s/.test(line[j])) j++; out.push({ t: 'ws', v: line.slice(i, j), pos }); i = j; continue }
-    if (c === '•' || c === '.') { out.push({ t: 'click', v: c, pos }); i++; continue }
-    if (c === '|') { let j = i; while (line[j] === '|') j++; out.push({ t: 'gap', v: line.slice(i, j), pos }); i = j; continue }
-    if (c === ':' || c === '=') { out.push({ t: 'colon', v: c, pos }); i++; continue }
-    if (c === '*' || c === '~') { let j = i+1; while (j < line.length && /[-\d.]/.test(line[j])) j++; out.push({ t: 'mod', v: line.slice(i, j), pos }); i = j; continue }
-    if (c === '+') { let j = i; while (j < line.length && line[j] !== ' ' && line[j] !== '#') j++; out.push({ t: 'mod', v: line.slice(i, j), pos }); i = j; continue }
-    if (c === '!') { out.push({ t: 'mod', v: '!', pos }); i++; continue }
-    if (/[0-9]/.test(c)) { let j = i+1; while (j < line.length && /[0-9.]/.test(line[j])) j++; out.push({ t: 'num', v: line.slice(i, j), pos }); i = j; continue }
-    if (/[a-z]/i.test(c)) {
-      let j = i+1; while (j < line.length && /[a-z0-9_]/i.test(line[j])) j++
-      const w = line.slice(i, j).toLowerCase()
-      out.push({ t: ['tempo','ornament'].includes(w) ? 'kw' : 'ident', v: line.slice(i, j), pos })
-      i = j; continue
-    }
-    out.push({ t: 'unknown', v: c, pos }); i++
-  }
-  return out
-}
+import { tokenizeWithPos, getPlayableLines } from '../lib/coda-dsl'
+import type { Tok } from '../lib/coda-dsl'
 
 /* ── DSL linter ─────────────────────────────────────────── */
 function codaLinter(view: EditorView): Diagnostic[] {
@@ -111,18 +85,6 @@ function codaLinter(view: EditorView): Diagnostic[] {
   }
 
   return diags
-}
-
-/* ── Playable-line detection ────────────────────────────── */
-const KEYWORDS = new Set(['tempo', 'ornament'])
-
-function getPlayableLines(text: string): Set<number> {
-  const result = new Set<number>()
-  text.split('\n').forEach((line, idx) => {
-    const m = line.match(/^\s*([a-z][a-z0-9_]*)\s*:/i)
-    if (m && !KEYWORDS.has(m[1].toLowerCase())) result.add(idx)
-  })
-  return result
 }
 
 /* ── State effects & fields ─────────────────────────────── */
