@@ -1201,3 +1201,194 @@ section.act {
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Bird Syntax section ───────────────────────────────────── */
+
+.bird-syntax-grid {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 32px;
+  align-items: start;
+}
+
+.bird-syntax-seq-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+  padding: 16px;
+  background: color-mix(in oklch, var(--surface-1) 60%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  min-height: 64px;
+  flex-wrap: wrap;
+}
+
+.bird-syntax-panel {
+  background: color-mix(in oklch, var(--surface-1) 60%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.bird-syntax-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.bird-syntax-badge {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: var(--tr-wide);
+  text-transform: uppercase;
+  color: var(--foam);
+  border: 1px solid color-mix(in oklch, var(--foam) 40%, transparent);
+  background: color-mix(in oklch, var(--foam) 8%, transparent);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+.bird-syntax-badge.cf {
+  color: var(--coral);
+  border-color: color-mix(in oklch, var(--coral) 40%, transparent);
+  background: color-mix(in oklch, var(--coral) 8%, transparent);
+}
+
+.bird-syntax-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--fg-muted);
+  user-select: none;
+  margin-bottom: 10px;
+}
+
+.bird-syntax-toggle input[type="checkbox"] {
+  accent-color: var(--krill);
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.bird-syntax-cf-note {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--coral);
+  line-height: 1.6;
+  border-left: 2px solid color-mix(in oklch, var(--coral) 40%, transparent);
+  padding-left: 10px;
+  margin-bottom: 12px;
+  opacity: 0.85;
+}
+
+@media (max-width: 900px) {
+  .bird-syntax-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .bird-syntax-seq-wrap {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ── Bird Intro section ────────────────────────────────────── */
+
+.bird-intro-grid {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 32px;
+  align-items: start;
+}
+
+.bird-intro-plot-wrap {
+  background: color-mix(in oklch, var(--surface-1) 40%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px;
+}
+
+.bird-intro-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+  font-size: 12px;
+}
+
+.bird-intro-table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--line);
+}
+
+.bird-intro-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid color-mix(in oklch, var(--line) 50%, transparent);
+  color: var(--fg-muted);
+  line-height: 1.4;
+  vertical-align: top;
+}
+
+.bird-intro-table td.bird-intro-table-dim {
+  color: var(--fg);
+  font-weight: 500;
+  white-space: nowrap;
+  padding-right: 24px;
+}
+
+.bird-intro-table tr:last-child td {
+  border-bottom: none;
+}
+
+.bird-intro-callout {
+  margin-top: 48px;
+  padding: 20px 24px;
+  background: color-mix(in oklch, var(--krill) 6%, transparent);
+  border-left: 3px solid color-mix(in oklch, var(--krill) 50%, transparent);
+  border-radius: 0 8px 8px 0;
+}
+
+.bird-intro-callout-label {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: var(--tr-wide);
+  text-transform: uppercase;
+  color: var(--krill);
+  margin-bottom: 8px;
+}
+
+.bird-intro-callout p:last-child {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--fg-muted);
+  line-height: 1.7;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .bird-intro-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .bird-intro-table {
+    font-size: 11px;
+  }
+  .bird-intro-table th,
+  .bird-intro-table td {
+    padding: 8px 10px;
+  }
+}
