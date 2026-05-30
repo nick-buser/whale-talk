@@ -42,7 +42,7 @@ const SECTION_META: Record<SectionId, { title: string; blurb: string }> = {
 const VALID_SECTIONS = new Set<string>(SECTIONS.map(s => s.id))
 
 const SECTION_COMPONENTS: Partial<Record<SectionId, React.LazyExoticComponent<React.ComponentType>>> = {
-  // sections added in subsequent PRs
+  intro: lazy(() => import('./sections/PrimateIntro').then(m => ({ default: m.PrimateIntro }))),
 }
 
 function PrimateStub({ section }: { section: SectionId }) {
