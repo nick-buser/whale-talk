@@ -7,9 +7,9 @@ import { Eyebrow } from '../components/Eyebrow'
    Timing derived from Eastern Caribbean socialising recordings
    (Rendell & Whitehead 2003). Response gaps and coda types
    are realistic; exact sequence is illustrative.              */
-interface ExchangeEvent { whale: string; t: number; coda: string }
+export interface ExchangeEvent { whale: string; t: number; coda: string }
 
-const EXCHANGE: ExchangeEvent[] = [
+export const EXCHANGE: ExchangeEvent[] = [
   // Opening — W1 initiates, W2 responds
   { whale: 'W1', t:  0.0,  coda: '5R1'     },
   { whale: 'W2', t:  2.3,  coda: '4+1'     },
@@ -37,13 +37,13 @@ const W_COLOR: Record<string, string> = {
   W1: '#4afdc6', W2: '#c6ffe6', W3: '#ffb472',
 }
 
-function codaDur(name: string) {
+export function codaDur(name: string) {
   const c = CODAS.find(c => c.name === name)
   return c ? c.intervals.reduce((s, v) => s + v, 0) : 0.8
 }
 
 /* ── Derived stats ───────────────────────────────────── */
-function calcStats() {
+export function calcStats() {
   const gaps: number[] = []
   for (let i = 1; i < EXCHANGE.length; i++) {
     const prev = EXCHANGE[i - 1], cur = EXCHANGE[i]

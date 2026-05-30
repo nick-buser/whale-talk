@@ -17,7 +17,7 @@ const REFERENCES = [
 
 const LOG_MIN = Math.log10(30)
 const LOG_MAX = Math.log10(200_000)
-const logFrac = (n: number) => (Math.log10(Math.max(n, 31)) - LOG_MIN) / (LOG_MAX - LOG_MIN)
+export const logFrac = (n: number) => (Math.log10(Math.max(n, 31)) - LOG_MIN) / (LOG_MAX - LOG_MIN)
 
 /* ── Animated counter hook ───────────────────────────── */
 function useAnimatedValue(target: number) {
