@@ -1411,3 +1411,51 @@ section.act {
   background: color-mix(in oklch, var(--surface-1) 50%, transparent);
   border-left-width: 3px;
 }
+
+/* ── Primate stub ──────────────────────────────────────────── */
+
+.primate-stub {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 560px;
+}
+
+.primate-stub-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--krill);
+  margin: 0;
+}
+
+.primate-stub-title {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--fg);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.primate-stub-blurb {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--fg-2);
+  margin: 0;
+}
+
+.primate-stub-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  background: color-mix(in oklch, var(--krill) 14%, transparent);
+  color: var(--krill);
+  width: fit-content;
+}

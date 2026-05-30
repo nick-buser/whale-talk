@@ -25,6 +25,7 @@ const NAV_ITEMS = [
 export function Chrome({ activeAct, audioOn, onAudioToggle, tweaksOpen, onTweaksToggle }: ChromeProps) {
   const loc = useLocation()
   const onBirds = loc.pathname.startsWith('/birds')
+  const onPrimates = loc.pathname.startsWith('/primates')
 
   function scrollTo(id: string) {
     const el = document.getElementById(id)
@@ -47,6 +48,13 @@ export function Chrome({ activeAct, audioOn, onAudioToggle, tweaksOpen, onTweaks
             className={onBirds ? 'active' : ''}
           >
             Birds
+          </Link>
+          <Link
+            to="/primates/$section"
+            params={{ section: 'intro' }}
+            className={onPrimates ? 'active' : ''}
+          >
+            Primates
           </Link>
         </div>
       </div>
