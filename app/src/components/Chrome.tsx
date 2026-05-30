@@ -18,6 +18,7 @@ const NAV_ITEMS = [
   { id: 'network',  label: 'Network' },
   { id: 'humpback', label: 'Song' },
   { id: 'clade',    label: 'Clade' },
+  { id: 'larynx',   label: 'Voice' },
   { id: 'zipf',     label: 'Zipf' },
   { id: 'brain',    label: 'Brain' },
   { id: 'gap',      label: 'Gap' },
