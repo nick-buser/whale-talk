@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react'
 import { Link, useParams, useLocation } from '@tanstack/react-router'
 
 const SECTIONS = [
@@ -40,12 +41,30 @@ const SECTION_META: Record<SectionId, { title: string; blurb: string }> = {
 
 const VALID_SECTIONS = new Set<string>(SECTIONS.map(s => s.id))
 
+// Lazy-load real section components; others fall back to the stub
+const SECTION_COMPONENTS: Partial<Record<SectionId, React.LazyExoticComponent<React.ComponentType>>> = {
+  anatomy: lazy(() => import('./sections/BirdAnatomy').then(m => ({ default: m.BirdAnatomy }))),
+}
+
+function BirdStub({ section }: { section: SectionId }) {
+  const meta = SECTION_META[section]
+  return (
+    <div className="bird-stub">
+      <p className="bird-stub-eyebrow">Birdsong</p>
+      <h1 className="bird-stub-title">{meta.title}</h1>
+      <p className="bird-stub-blurb">{meta.blurb}</p>
+      <span className="bird-stub-tag">Coming soon</span>
+    </div>
+  )
+}
+
 export function BirdsPage() {
   const { section: raw } = useParams({ strict: false }) as { section?: string }
   const section: SectionId = VALID_SECTIONS.has(raw ?? '') ? (raw as SectionId) : 'intro'
-  const meta = SECTION_META[section]
   const loc = useLocation()
   const onBirds = loc.pathname.startsWith('/birds')
+
+  const SectionComp = SECTION_COMPONENTS[section]
 
   return (
     <>
@@ -89,12 +108,10 @@ export function BirdsPage() {
         </aside>
 
         <main className="bird-main">
-          <div className="bird-stub">
-            <p className="bird-stub-eyebrow">Birdsong</p>
-            <h1 className="bird-stub-title">{meta.title}</h1>
-            <p className="bird-stub-blurb">{meta.blurb}</p>
-            <span className="bird-stub-tag">Coming soon</span>
-          </div>
+          {SectionComp
+            ? <Suspense fallback={<BirdStub section={section} />}><SectionComp /></Suspense>
+            : <BirdStub section={section} />
+          }
         </main>
       </div>
     </>
