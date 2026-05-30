@@ -1688,3 +1688,275 @@ section.act {
   line-height: 1.7;
   margin: 12px 0 0;
 }
+
+/* ── Primate combinatorics — Campbell's monkey ─────────────── */
+
+.primate-campbell {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.primate-campbell-header {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  padding: 10px 16px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-quiet);
+  background: color-mix(in oklch, var(--surface-1) 60%, transparent);
+  border-bottom: 1px solid var(--line);
+}
+
+.primate-campbell-row {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  align-items: center;
+  padding: 14px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid color-mix(in oklch, var(--line) 50%, transparent);
+  transition: background 0.15s;
+}
+
+.primate-campbell-row:last-of-type {
+  border-bottom: none;
+}
+
+.primate-campbell-row:hover {
+  background: color-mix(in oklch, var(--call-color, var(--lumen)) 5%, transparent);
+}
+
+.primate-campbell-row.active {
+  background: color-mix(in oklch, var(--call-color, var(--lumen)) 8%, transparent);
+}
+
+.primate-campbell-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.primate-campbell-badge {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.primate-campbell-meaning {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--fg-muted);
+}
+
+.primate-campbell-suffix-col {
+  text-align: center;
+}
+
+.primate-campbell-arrow-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--krill);
+}
+
+.primate-campbell-arrow-label em {
+  font-style: normal;
+  font-weight: 600;
+}
+
+.primate-campbell-no-suffix {
+  color: var(--fg-quiet);
+  font-family: var(--font-mono);
+  font-size: 14px;
+}
+
+.primate-campbell-no-form {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--fg-quiet);
+  font-style: italic;
+}
+
+.primate-campbell-panel {
+  padding: 18px 20px;
+  border-top: 1px solid var(--line);
+  border-left: 3px solid transparent;
+  background: color-mix(in oklch, var(--surface-1) 50%, transparent);
+}
+
+.primate-campbell-contexts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.primate-campbell-ctx-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--fg-quiet);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.primate-campbell-ctx-body {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--fg-muted);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── Primate combinatorics — pyow-hack ─────────────────────── */
+
+.primate-pyow-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.primate-pyow-chips {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.primate-pyow-chip {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 1px solid;
+}
+
+.primate-pyow-plus {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  color: var(--fg-quiet);
+}
+
+.primate-pyow-compare {
+  display: grid;
+  grid-template-columns: 1fr 40px 1fr;
+  gap: 0;
+  align-items: stretch;
+}
+
+.primate-pyow-panel {
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.primate-pyow-panel-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-quiet);
+}
+
+.primate-pyow-panel-result {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--fg);
+  margin: 0;
+}
+
+.primate-pyow-panel-body {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--fg-muted);
+  line-height: 1.65;
+  margin: 0;
+}
+
+.primate-pyow-pred {
+  border-color: color-mix(in oklch, var(--shoal) 40%, transparent);
+}
+
+.primate-pyow-actual {
+  border-color: color-mix(in oklch, var(--coral) 40%, transparent);
+}
+
+.primate-pyow-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-size: 22px;
+  color: var(--coral);
+  font-weight: 700;
+}
+
+/* ── Primate combinatorics — secondary cards ───────────────── */
+
+.primate-secondary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.primate-secondary-card {
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-top-width: 3px;
+  border-top-color: var(--item-color, var(--lumen));
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.primate-secondary-card:hover,
+.primate-secondary-card.open {
+  background: color-mix(in oklch, var(--item-color, var(--lumen)) 5%, transparent);
+}
+
+.primate-secondary-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.primate-secondary-title {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.primate-secondary-finding {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--fg-quiet);
+}
+
+.primate-secondary-body {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--fg-muted);
+  line-height: 1.65;
+  margin: 6px 0 0;
+}
+
+@media (max-width: 600px) {
+  .primate-secondary-grid { grid-template-columns: 1fr; }
+  .primate-pyow-compare { grid-template-columns: 1fr; }
+  .primate-pyow-divider { padding: 8px 0; }
+  .primate-campbell-contexts { grid-template-columns: 1fr; }
+}
