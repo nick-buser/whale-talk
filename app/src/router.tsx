@@ -1,6 +1,6 @@
-import { createRouter, createRoute, createRootRoute, Outlet } from '@tanstack/react-router'
+import { createRouter, createRoute, createRootRoute, Outlet, redirect } from '@tanstack/react-router'
 import App from './App'
-import { BirdsPlaceholder } from './birds/BirdsPlaceholder'
+import { BirdsPage } from './birds/BirdsPage'
 
 const rootRoute = createRootRoute({ component: () => <Outlet /> })
 
@@ -10,13 +10,22 @@ const indexRoute = createRoute({
   component: App,
 })
 
-const birdsRoute = createRoute({
+// Redirect bare /birds to /birds/intro
+const birdsIndexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/birds',
-  component: BirdsPlaceholder,
+  beforeLoad: () => {
+    throw redirect({ to: '/birds/$section', params: { section: 'intro' } })
+  },
 })
 
-const routeTree = rootRoute.addChildren([indexRoute, birdsRoute])
+export const birdsSectionRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/birds/$section',
+  component: BirdsPage,
+})
+
+const routeTree = rootRoute.addChildren([indexRoute, birdsIndexRoute, birdsSectionRoute])
 
 export const router = createRouter({ routeTree })
 
