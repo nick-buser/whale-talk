@@ -46,6 +46,7 @@ const SECTION_COMPONENTS: Partial<Record<SectionId, React.LazyExoticComponent<Re
   reference:         lazy(() => import('./sections/PrimateReference').then(m => ({ default: m.PrimateReference }))),
   combinatorics:     lazy(() => import('./sections/PrimateCombinatorics').then(m => ({ default: m.PrimateCombinatorics }))),
   compositionality:  lazy(() => import('./sections/PrimateCompositionality').then(m => ({ default: m.PrimateCompositionality }))),
+  gesture:           lazy(() => import('./sections/PrimateGesture').then(m => ({ default: m.PrimateGesture }))),
 }
 
 function PrimateStub({ section }: { section: SectionId }) {

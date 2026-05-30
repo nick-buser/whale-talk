@@ -2004,3 +2004,184 @@ section.act {
   line-height: 1.65;
   margin: 0;
 }
+
+/* ── Primate gesture — highlight card ──────────────────────── */
+
+.primate-gesture-highlight {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 24px;
+  align-items: center;
+  padding: 20px 24px;
+  border: 1px solid color-mix(in oklch, var(--lumen) 30%, transparent);
+  border-radius: 12px;
+  background: color-mix(in oklch, var(--lumen) 5%, transparent);
+}
+
+.primate-gesture-highlight-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.primate-gesture-highlight-val {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--lumen);
+  line-height: 1;
+}
+
+.primate-gesture-highlight-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: color-mix(in oklch, var(--lumen) 70%, transparent);
+  text-align: center;
+}
+
+.primate-gesture-highlight-title {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--fg);
+  margin: 0 0 8px;
+}
+
+.primate-gesture-highlight-body {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--fg-muted);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── Primate gesture — category filters ────────────────────── */
+
+.primate-gesture-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.primate-gesture-filter {
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklch, var(--filt-color, var(--fg-quiet)) 35%, transparent);
+  background: transparent;
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+.primate-gesture-filter:hover {
+  border-color: color-mix(in oklch, var(--filt-color, var(--fg-quiet)) 60%, transparent);
+  background: color-mix(in oklch, var(--filt-color, var(--fg-quiet)) 8%, transparent);
+  color: var(--fg);
+}
+
+.primate-gesture-filter.active {
+  border-color: var(--filt-color, var(--fg-quiet));
+  background: color-mix(in oklch, var(--filt-color, var(--fg-quiet)) 12%, transparent);
+  color: var(--fg);
+}
+
+/* ── Primate gesture — grid layout ────────────────────────── */
+
+.primate-gesture-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 24px;
+  align-items: start;
+}
+
+.primate-gesture-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+}
+
+.primate-gesture-card {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s, opacity 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.primate-gesture-card:hover:not(.dimmed) {
+  border-color: color-mix(in oklch, var(--card-color, var(--lumen)) 50%, transparent);
+  background: color-mix(in oklch, var(--card-color, var(--lumen)) 6%, transparent);
+}
+
+.primate-gesture-card.selected {
+  border-color: var(--card-color, var(--lumen));
+  background: color-mix(in oklch, var(--card-color, var(--lumen)) 10%, transparent);
+}
+
+.primate-gesture-card.dimmed {
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.primate-gesture-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.primate-gesture-card-label {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fg);
+  line-height: 1.3;
+}
+
+.primate-gesture-intent-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.primate-gesture-intent-dot.yes {
+  background: var(--lumen);
+}
+
+.primate-gesture-intent-dot.no {
+  background: transparent;
+  border: 1.5px solid var(--fg-quiet);
+}
+
+.primate-gesture-card-meaning {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--fg-muted);
+  line-height: 1.4;
+  font-style: italic;
+}
+
+.primate-gesture-card-cat {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+@media (max-width: 900px) {
+  .primate-gesture-layout { grid-template-columns: 1fr; }
+  .primate-gesture-highlight { grid-template-columns: 80px 1fr; }
+}
