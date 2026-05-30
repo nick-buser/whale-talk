@@ -1531,3 +1531,160 @@ section.act {
   color: var(--fg-muted);
   line-height: 1.55;
 }
+
+/* ── Primate reference — flow diagram ──────────────────────── */
+
+.primate-flow-header {
+  display: grid;
+  grid-template-columns: 1fr 28px 1fr 28px 1fr;
+  gap: 0;
+  padding: 0 16px 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-quiet);
+}
+
+.primate-flow-diagram {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.primate-flow-row {
+  display: grid;
+  grid-template-columns: 1fr 28px 1fr 28px 1fr;
+  align-items: center;
+  gap: 0;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-left: 3px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.primate-flow-row:hover {
+  border-color: color-mix(in oklch, var(--call-color, var(--lumen)) 40%, transparent);
+  border-left-color: color-mix(in oklch, var(--call-color, var(--lumen)) 60%, transparent);
+  background: color-mix(in oklch, var(--call-color, var(--lumen)) 5%, transparent);
+}
+
+.primate-flow-row.active {
+  border-color: color-mix(in oklch, var(--call-color, var(--lumen)) 45%, transparent);
+  border-left-color: var(--call-color, var(--lumen));
+  background: color-mix(in oklch, var(--call-color, var(--lumen)) 8%, transparent);
+}
+
+.primate-flow-node {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: color-mix(in oklch, var(--surface-1) 60%, transparent);
+  border: 1px solid color-mix(in oklch, var(--line) 60%, transparent);
+}
+
+.primate-flow-call-node {
+  border-color: color-mix(in oklch, var(--call-color, var(--lumen)) 35%, transparent);
+}
+
+.primate-flow-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.primate-flow-node-text {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--fg);
+  font-weight: 500;
+}
+
+.primate-flow-arrow {
+  text-align: center;
+  color: var(--fg-quiet);
+  font-size: 16px;
+  opacity: 0.5;
+}
+
+.primate-flow-panel {
+  margin-top: 16px;
+  padding: 20px 24px;
+  border: 1px solid var(--line);
+  border-left-width: 3px;
+  border-radius: 10px;
+  background: color-mix(in oklch, var(--surface-1) 50%, transparent);
+}
+
+.primate-flow-not {
+  border-top: 1px solid color-mix(in oklch, var(--line) 60%, transparent);
+  padding-top: 14px;
+}
+
+.primate-flow-not-label {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-quiet);
+  margin-bottom: 8px;
+}
+
+/* ── Primate reference — limits accordion ──────────────────── */
+
+.primate-limits {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.primate-limit-card {
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.primate-limit-card:hover,
+.primate-limit-card.open {
+  border-color: color-mix(in oklch, var(--krill) 40%, transparent);
+  background: color-mix(in oklch, var(--krill) 5%, transparent);
+}
+
+.primate-limit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.primate-limit-label {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.primate-limit-caret {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  color: var(--fg-quiet);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.primate-limit-body {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  color: var(--fg-muted);
+  line-height: 1.7;
+  margin: 12px 0 0;
+}
