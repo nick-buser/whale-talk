@@ -646,6 +646,81 @@ section.act {
 }
 .specimen .coord-row .v { color: var(--foam); margin-left: 6px; }
 
+/* ── Clade act — species selector + facts ──────────────────── */
+.clade-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.clade-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 18px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  flex: 1;
+  min-width: 150px;
+  transition: border-color 120ms, background 120ms;
+}
+.clade-tab:hover {
+  border-color: color-mix(in oklch, var(--sp-color, var(--lumen)) 45%, transparent);
+  background: color-mix(in oklch, var(--sp-color, var(--lumen)) 6%, transparent);
+}
+.clade-tab.active {
+  border-color: color-mix(in oklch, var(--sp-color, var(--lumen)) 60%, transparent);
+  border-top: 2px solid var(--sp-color, var(--lumen));
+  background: color-mix(in oklch, var(--sp-color, var(--lumen)) 9%, transparent);
+}
+.clade-tab-name {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: var(--foam);
+}
+.clade-tab-signal {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--sp-color, var(--shoal));
+}
+
+.clade-facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.clade-fact {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  background: var(--abyss);
+}
+.clade-fact-k {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--shoal);
+}
+.clade-fact-v {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--foam);
+  line-height: 1.4;
+}
+
+@media (max-width: 600px) {
+  .clade-facts { grid-template-columns: 1fr; }
+}
+
 /* Two-col layouts */
 .split-2 {
   display: grid;
