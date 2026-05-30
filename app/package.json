@@ -16,6 +16,7 @@
     "@codemirror/lint": "^6.9.6",
     "@codemirror/state": "^6.4.1",
     "@codemirror/view": "^6.26.3",
+    "@tanstack/react-router": "^1.170.10",
     "@uiw/codemirror-theme-dracula": "^4.23.0",
     "animejs": "^3.2.2",
     "d3": "^7.9.0",

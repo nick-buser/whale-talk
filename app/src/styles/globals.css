@@ -387,6 +387,40 @@ strong { font-weight: 600; color: var(--fg); }
 .chrome .nav a:hover { color: var(--foam); }
 .chrome .nav a.active { color: var(--lumen); background: color-mix(in oklch, var(--lumen) 8%, transparent); }
 
+.chrome-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.chrome-tabs {
+  display: flex;
+  gap: 2px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 2px;
+}
+
+.chrome-tabs a {
+  padding: 4px 10px;
+  color: var(--fg-muted);
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 999px;
+  transition: color var(--dur-quick) var(--ease-glide), background var(--dur-quick);
+}
+
+.chrome-tabs a:hover { color: var(--foam); }
+
+.chrome-tabs a.active {
+  color: var(--krill);
+  background: color-mix(in oklch, var(--krill) 14%, transparent);
+}
+
 .chrome .badge {
   display: inline-flex; align-items: center; gap: 8px;
   border: 1px solid color-mix(in oklch, var(--lumen) 35%, transparent);
