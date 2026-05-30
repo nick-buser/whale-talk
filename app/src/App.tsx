@@ -11,6 +11,7 @@ const ActDsl   = lazy(() => import('./acts/ActDsl').then(m => ({ default: m.ActD
 const ActSynth   = lazy(() => import('./acts/ActSynth').then(m => ({ default: m.ActSynth })))
 const ActDialect      = lazy(() => import('./acts/ActDialect').then(m => ({ default: m.ActDialect })))
 const ActConversation = lazy(() => import('./acts/ActConversation').then(m => ({ default: m.ActConversation })))
+const ActCapacity     = lazy(() => import('./acts/ActCapacity').then(m => ({ default: m.ActCapacity })))
 import { ActNetwork } from './acts/ActNetwork'
 import { ActHumpback } from './acts/ActHumpback'
 import { ActZipf } from './acts/ActZipf'
@@ -18,7 +19,7 @@ import { ActBrain } from './acts/ActBrain'
 import { ActGap } from './acts/ActGap'
 import { whaleAudio } from './lib/audio'
 
-const ACT_IDS = ['hero', 'spectrum', 'range', 'anatomy', 'coda', 'dsl', 'synth', 'dialect', 'conversation', 'network', 'humpback', 'zipf', 'brain', 'gap']
+const ACT_IDS = ['hero', 'spectrum', 'range', 'anatomy', 'coda', 'dsl', 'synth', 'dialect', 'conversation', 'capacity', 'network', 'humpback', 'zipf', 'brain', 'gap']
 
 function AppInner() {
   const [activeAct, setActiveAct] = useState('hero')
@@ -97,6 +98,7 @@ function AppInner() {
         <Suspense fallback={null}><ActSynth /></Suspense>
         <Suspense fallback={null}><ActDialect /></Suspense>
         <Suspense fallback={null}><ActConversation /></Suspense>
+        <Suspense fallback={null}><ActCapacity /></Suspense>
         <ActNetwork />
         <ActHumpback />
         <ActZipf />
