@@ -47,6 +47,7 @@ const SECTION_COMPONENTS: Partial<Record<SectionId, React.LazyExoticComponent<Re
   anatomy:   lazy(() => import('./sections/BirdAnatomy').then(m => ({ default: m.BirdAnatomy }))),
   syntax:    lazy(() => import('./sections/BirdSyntax').then(m => ({ default: m.BirdSyntax }))),
   hierarchy: lazy(() => import('./sections/BirdHierarchy').then(m => ({ default: m.BirdHierarchy }))),
+  learning:  lazy(() => import('./sections/BirdLearning').then(m => ({ default: m.BirdLearning }))),
 }
 
 function BirdStub({ section }: { section: SectionId }) {
