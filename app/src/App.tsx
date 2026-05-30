@@ -15,12 +15,13 @@ const ActCapacity     = lazy(() => import('./acts/ActCapacity').then(m => ({ def
 import { ActNetwork } from './acts/ActNetwork'
 import { ActHumpback } from './acts/ActHumpback'
 import { ActClade } from './acts/ActClade'
+import { ActLarynx } from './acts/ActLarynx'
 import { ActZipf } from './acts/ActZipf'
 import { ActBrain } from './acts/ActBrain'
 import { ActGap } from './acts/ActGap'
 import { whaleAudio } from './lib/audio'
 
-const ACT_IDS = ['hero', 'spectrum', 'range', 'anatomy', 'coda', 'dsl', 'synth', 'dialect', 'conversation', 'capacity', 'network', 'humpback', 'clade', 'zipf', 'brain', 'gap']
+const ACT_IDS = ['hero', 'spectrum', 'range', 'anatomy', 'coda', 'dsl', 'synth', 'dialect', 'conversation', 'capacity', 'network', 'humpback', 'clade', 'larynx', 'zipf', 'brain', 'gap']
 
 function AppInner() {
   const [activeAct, setActiveAct] = useState('hero')
@@ -103,6 +104,7 @@ function AppInner() {
         <ActNetwork />
         <ActHumpback />
         <ActClade />
+        <ActLarynx />
         <ActZipf />
         <ActBrain />
         <ActGap />
