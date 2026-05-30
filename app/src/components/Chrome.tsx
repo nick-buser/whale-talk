@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useLocation } from '@tanstack/react-router'
 
 interface ChromeProps {
   activeAct: string
@@ -23,6 +23,9 @@ const NAV_ITEMS = [
 ]
 
 export function Chrome({ activeAct, audioOn, onAudioToggle, tweaksOpen, onTweaksToggle }: ChromeProps) {
+  const loc = useLocation()
+  const onBirds = loc.pathname.startsWith('/birds')
+
   function scrollTo(id: string) {
     const el = document.getElementById(id)
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -38,7 +41,11 @@ export function Chrome({ activeAct, audioOn, onAudioToggle, tweaksOpen, onTweaks
           <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: 'active' }}>
             Whales
           </Link>
-          <Link to="/birds" activeProps={{ className: 'active' }}>
+          <Link
+            to="/birds/$section"
+            params={{ section: 'intro' }}
+            className={onBirds ? 'active' : ''}
+          >
             Birds
           </Link>
         </div>
