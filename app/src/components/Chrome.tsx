@@ -1,3 +1,5 @@
+import { Link } from '@tanstack/react-router'
+
 interface ChromeProps {
   activeAct: string
   audioOn: boolean
@@ -28,9 +30,19 @@ export function Chrome({ activeAct, audioOn, onAudioToggle, tweaksOpen, onTweaks
 
   return (
     <header className="chrome">
-      <a href="#hero" className="brand" onClick={(e) => { e.preventDefault(); scrollTo('hero') }}>
-        <img src="/assets/mark.svg" alt="Sounding" />
-      </a>
+      <div className="chrome-left">
+        <a href="#hero" className="brand" onClick={(e) => { e.preventDefault(); scrollTo('hero') }}>
+          <img src="/assets/mark.svg" alt="Sounding" />
+        </a>
+        <div className="chrome-tabs">
+          <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: 'active' }}>
+            Whales
+          </Link>
+          <Link to="/birds" activeProps={{ className: 'active' }}>
+            Birds
+          </Link>
+        </div>
+      </div>
       <nav className="nav">
         {NAV_ITEMS.map(item => (
           <a
@@ -69,3 +81,4 @@ export function Chrome({ activeAct, audioOn, onAudioToggle, tweaksOpen, onTweaks
     </header>
   )
 }
+
