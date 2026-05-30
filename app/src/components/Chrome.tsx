@@ -19,6 +19,7 @@ const NAV_ITEMS = [
   { id: 'humpback', label: 'Song' },
   { id: 'clade',    label: 'Clade' },
   { id: 'larynx',   label: 'Voice' },
+  { id: 'designspace', label: 'Space' },
   { id: 'zipf',     label: 'Zipf' },
   { id: 'brain',    label: 'Brain' },
   { id: 'gap',      label: 'Gap' },
