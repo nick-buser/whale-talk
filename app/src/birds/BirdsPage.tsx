@@ -43,9 +43,10 @@ const VALID_SECTIONS = new Set<string>(SECTIONS.map(s => s.id))
 
 // Lazy-load real section components; others fall back to the stub
 const SECTION_COMPONENTS: Partial<Record<SectionId, React.LazyExoticComponent<React.ComponentType>>> = {
-  intro:   lazy(() => import('./sections/BirdIntro').then(m => ({ default: m.BirdIntro }))),
-  anatomy: lazy(() => import('./sections/BirdAnatomy').then(m => ({ default: m.BirdAnatomy }))),
-  syntax:  lazy(() => import('./sections/BirdSyntax').then(m => ({ default: m.BirdSyntax }))),
+  intro:     lazy(() => import('./sections/BirdIntro').then(m => ({ default: m.BirdIntro }))),
+  anatomy:   lazy(() => import('./sections/BirdAnatomy').then(m => ({ default: m.BirdAnatomy }))),
+  syntax:    lazy(() => import('./sections/BirdSyntax').then(m => ({ default: m.BirdSyntax }))),
+  hierarchy: lazy(() => import('./sections/BirdHierarchy').then(m => ({ default: m.BirdHierarchy }))),
 }
 
 function BirdStub({ section }: { section: SectionId }) {
