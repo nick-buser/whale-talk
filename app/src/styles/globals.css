@@ -1960,3 +1960,47 @@ section.act {
   .primate-pyow-divider { padding: 8px 0; }
   .primate-campbell-contexts { grid-template-columns: 1fr; }
 }
+
+/* ── Primate compositionality — test steps ─────────────────── */
+
+.primate-comp-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.primate-comp-step {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 16px;
+  align-items: start;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: color-mix(in oklch, var(--surface-1) 40%, transparent);
+}
+
+.primate-comp-step-n {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--krill);
+  opacity: 0.6;
+  line-height: 1;
+  padding-top: 2px;
+}
+
+.primate-comp-step-title {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+  margin: 0 0 6px;
+}
+
+.primate-comp-step-body {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  color: var(--fg-muted);
+  line-height: 1.65;
+  margin: 0;
+}
