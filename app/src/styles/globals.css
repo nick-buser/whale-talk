@@ -1058,3 +1058,146 @@ section.act {
   .bird-sidebar nav::-webkit-scrollbar { display: none; }
   .bird-sidebar nav a { white-space: nowrap; }
 }
+
+/* ── Bird act wrapper ─────────────────────────────────────────────── */
+
+.bird-act {
+  padding: 48px 0 80px;
+}
+
+/* ── Bird anatomy (PR 3) ──────────────────────────────────────────── */
+
+.bird-anatomy-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 32px;
+  align-items: start;
+}
+
+.bird-anatomy-svg-wrap {
+  min-width: 0;
+}
+
+.bird-play-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklch, var(--lumen) 40%, transparent);
+  background: transparent;
+  color: var(--lumen);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background var(--dur-quick), color var(--dur-quick);
+}
+
+.bird-play-btn:hover:not(:disabled) {
+  background: color-mix(in oklch, var(--lumen) 10%, transparent);
+}
+
+.bird-play-btn.active,
+.bird-play-btn:disabled {
+  color: var(--fg-muted);
+  border-color: var(--line-strong);
+  cursor: default;
+}
+
+.bird-info-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 24px;
+  min-height: 260px;
+}
+
+.bird-info-panel--empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+.bird-info-hint {
+  font-family: var(--font-sans);
+  font-size: var(--t-small);
+  color: var(--fg-quiet);
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+.bird-info-legend {
+  display: grid;
+  grid-template-columns: 10px 1fr;
+  gap: 6px 10px;
+  align-items: center;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+
+.bird-info-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  justify-self: center;
+}
+
+.bird-info-sub {
+  font-family: var(--font-sans);
+  font-size: var(--t-micro);
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  color: var(--fg-quiet);
+  margin-bottom: 6px;
+}
+
+.bird-info-title {
+  font-family: var(--font-display);
+  font-size: var(--t-h3);
+  color: var(--fg);
+  margin-bottom: 14px;
+}
+
+.bird-info-body {
+  font-family: var(--font-body);
+  font-size: var(--t-small);
+  color: var(--fg-muted);
+  line-height: var(--lh-body);
+  margin-bottom: 20px;
+}
+
+.bird-info-lesion {
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+
+.bird-info-lesion-label {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: var(--tr-wide);
+  text-transform: uppercase;
+  color: var(--coral);
+  border: 1px solid color-mix(in oklch, var(--coral) 40%, transparent);
+  border-radius: 999px;
+  padding: 2px 8px;
+  margin-bottom: 8px;
+}
+
+.bird-info-lesion-text {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--fg-muted);
+  line-height: var(--lh-body);
+  font-style: italic;
+}
+
+@media (max-width: 900px) {
+  .bird-anatomy-grid {
+    grid-template-columns: 1fr;
+  }
+}
