@@ -42,9 +42,10 @@ const SECTION_META: Record<SectionId, { title: string; blurb: string }> = {
 const VALID_SECTIONS = new Set<string>(SECTIONS.map(s => s.id))
 
 const SECTION_COMPONENTS: Partial<Record<SectionId, React.LazyExoticComponent<React.ComponentType>>> = {
-  intro:          lazy(() => import('./sections/PrimateIntro').then(m => ({ default: m.PrimateIntro }))),
-  reference:      lazy(() => import('./sections/PrimateReference').then(m => ({ default: m.PrimateReference }))),
-  combinatorics:  lazy(() => import('./sections/PrimateCombinatorics').then(m => ({ default: m.PrimateCombinatorics }))),
+  intro:             lazy(() => import('./sections/PrimateIntro').then(m => ({ default: m.PrimateIntro }))),
+  reference:         lazy(() => import('./sections/PrimateReference').then(m => ({ default: m.PrimateReference }))),
+  combinatorics:     lazy(() => import('./sections/PrimateCombinatorics').then(m => ({ default: m.PrimateCombinatorics }))),
+  compositionality:  lazy(() => import('./sections/PrimateCompositionality').then(m => ({ default: m.PrimateCompositionality }))),
 }
 
 function PrimateStub({ section }: { section: SectionId }) {
