@@ -14,12 +14,13 @@ const ActConversation = lazy(() => import('./acts/ActConversation').then(m => ({
 const ActCapacity     = lazy(() => import('./acts/ActCapacity').then(m => ({ default: m.ActCapacity })))
 import { ActNetwork } from './acts/ActNetwork'
 import { ActHumpback } from './acts/ActHumpback'
+import { ActClade } from './acts/ActClade'
 import { ActZipf } from './acts/ActZipf'
 import { ActBrain } from './acts/ActBrain'
 import { ActGap } from './acts/ActGap'
 import { whaleAudio } from './lib/audio'
 
-const ACT_IDS = ['hero', 'spectrum', 'range', 'anatomy', 'coda', 'dsl', 'synth', 'dialect', 'conversation', 'capacity', 'network', 'humpback', 'zipf', 'brain', 'gap']
+const ACT_IDS = ['hero', 'spectrum', 'range', 'anatomy', 'coda', 'dsl', 'synth', 'dialect', 'conversation', 'capacity', 'network', 'humpback', 'clade', 'zipf', 'brain', 'gap']
 
 function AppInner() {
   const [activeAct, setActiveAct] = useState('hero')
@@ -101,6 +102,7 @@ function AppInner() {
         <Suspense fallback={null}><ActCapacity /></Suspense>
         <ActNetwork />
         <ActHumpback />
+        <ActClade />
         <ActZipf />
         <ActBrain />
         <ActGap />
