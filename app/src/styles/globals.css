@@ -3201,3 +3201,150 @@ section.act {
 @media (max-width: 700px) {
   .parrot-conv-pillars { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   BEES TAB  (honey-gold accent: #f4c430) — dark hive aesthetic
+   ============================================================ */
+
+:root {
+  --bee:        #f4c430;
+  --bee-deep:   #9a7500;
+  --bee-amber:  #e8941a;
+  --bee-dark:   #1a1200;
+  --bee-hive:   #110e00;
+  --bee-cell:   #1e1800;
+  --bee-wall:   #2a2100;
+  --bee-wash:   color-mix(in oklch, #f4c430 14%, transparent);
+  --bee-glow:   color-mix(in oklch, #f4c430 25%, transparent);
+}
+
+/* ── Dark hive layout ──────────────────────────────────────── */
+
+.bee-layout {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  min-height: calc(100vh - 52px);
+  background: var(--bee-hive);
+}
+
+.bee-sidebar {
+  position: sticky;
+  top: 52px;
+  height: calc(100vh - 52px);
+  overflow-y: auto;
+  padding: 28px 0 40px;
+  border-right: 1px solid color-mix(in oklch, var(--bee) 16%, transparent);
+  background: var(--bee-cell);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bee-sidebar-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--bee-deep);
+  padding: 0 20px 12px;
+  margin: 0;
+}
+
+.bee-sidebar nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.bee-sidebar nav a {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: color-mix(in oklch, var(--bee) 55%, var(--fg-muted));
+  text-decoration: none;
+  padding: 8px 20px;
+  border-left: 2px solid transparent;
+  transition: color 0.12s, border-color 0.12s, background 0.12s;
+}
+
+.bee-sidebar nav a:hover {
+  color: var(--bee);
+  background: var(--bee-wash);
+}
+
+.bee-sidebar nav a.active {
+  color: var(--bee);
+  border-left-color: var(--bee);
+  background: var(--bee-wash);
+  font-weight: 600;
+}
+
+.bee-main {
+  padding: 40px 52px;
+  max-width: 900px;
+  background: var(--bee-hive);
+  color: color-mix(in oklch, var(--bee) 20%, var(--foam));
+}
+
+/* ── Bee chrome accent ─────────────────────────────────────── */
+
+.bee-chrome .chrome-tabs a.active {
+  color: var(--bee);
+  border-bottom-color: var(--bee);
+}
+
+/* ── Stub (coming-soon placeholder) ───────────────────────── */
+
+.bee-stub {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 560px;
+}
+
+.bee-stub-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--bee-deep);
+  margin: 0;
+}
+
+.bee-stub-title {
+  font-family: var(--font-display);
+  font-size: var(--t-h1);
+  font-weight: 700;
+  color: var(--bee);
+  letter-spacing: var(--tr-display);
+  line-height: var(--lh-snug);
+  margin: 0;
+}
+
+.bee-stub-blurb {
+  font-family: var(--font-body);
+  font-size: var(--t-lede);
+  line-height: var(--lh-body);
+  color: color-mix(in oklch, var(--bee) 30%, var(--foam));
+  margin: 0;
+}
+
+.bee-stub-tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--bee-wash);
+  background: var(--bee-wash);
+  color: var(--bee);
+}
+
+@media (max-width: 700px) {
+  .bee-layout { grid-template-columns: 1fr; }
+  .bee-sidebar { position: static; height: auto; flex-direction: row; overflow-x: auto; padding: 12px 0; }
+  .bee-sidebar nav { flex-direction: row; }
+  .bee-sidebar nav a { padding: 6px 14px; border-left: none; border-bottom: 2px solid transparent; white-space: nowrap; }
+  .bee-sidebar nav a.active { border-left-color: transparent; border-bottom-color: var(--bee); }
+  .bee-main { padding: 24px 20px; }
+}
