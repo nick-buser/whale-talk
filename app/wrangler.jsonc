@@ -1,0 +1,16 @@
+{
+  // Cloudflare Workers config for the whale-talk static site (Vite SPA).
+  // "Static assets only" Worker: no server code, it just serves the built
+  // ./dist directory. Deploy with:  npm run build && npx wrangler deploy
+  "name": "whale-talk",
+  "compatibility_date": "2025-05-31",
+  "assets": {
+    // Serve the Vite BUILD OUTPUT, not the source tree. This is the whole fix:
+    // the broken deploy was serving the source (so the browser got /src/main.tsx
+    // as raw TypeScript -> empty/"text/jsx" MIME -> "Failed to load module script").
+    "directory": "./dist",
+    // SPA fallback: serve index.html for client-side routes (e.g. /birds/intro)
+    // instead of 404. Real files under /assets/ are still served directly.
+    "not_found_handling": "single-page-application"
+  }
+}
