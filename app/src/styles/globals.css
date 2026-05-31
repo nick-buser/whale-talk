@@ -4032,3 +4032,214 @@ section.act {
   .bee-disp-req-head, .bee-disp-req-row { grid-template-columns: 1fr repeat(2, 60px); }
   .bee-disp-req-head span:last-child, .bee-disp-req-row span:last-child { display: none; }
 }
+
+/* ── Information Theory section ────────────────────────────── */
+
+.bee-info {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Bit budget */
+.bee-info-budget {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid color-mix(in oklch, var(--bee) 16%, transparent);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.bee-info-budget-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 90px;
+  align-items: center;
+  padding: 10px 14px;
+  border-top: 1px solid color-mix(in oklch, var(--bee) 10%, transparent);
+  cursor: pointer;
+  gap: 10px;
+  flex-wrap: wrap;
+  transition: background 0.12s;
+}
+
+.bee-info-budget-row:first-child { border-top: none; }
+.bee-info-budget-row:hover { background: var(--bee-cell); }
+.bee-info-budget-row.active { background: color-mix(in oklch, var(--budget-color, var(--bee)) 8%, transparent); }
+
+.bee-info-budget-ch {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--budget-color, var(--bee));
+}
+
+.bee-info-budget-bar-track {
+  height: 10px;
+  background: var(--bee-wall);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.bee-info-budget-bar-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.3s;
+}
+
+.bee-info-budget-bits {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-muted);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.bee-info-budget-detail {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 8px;
+  margin-top: 4px;
+  border-top: 1px solid color-mix(in oklch, var(--budget-color, var(--bee)) 18%, transparent);
+}
+
+.bee-info-budget-detail > div {
+  display: flex;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--fg-muted);
+}
+
+.bee-info-budget-detail-label {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--fg-quiet);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+.bee-info-budget-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--bee-wall);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--bee);
+  border-top: 2px solid color-mix(in oklch, var(--bee) 25%, transparent);
+}
+
+/* Channel comparison chart */
+.bee-info-chart {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+}
+
+.bee-info-ch-panel {
+  margin-top: 12px;
+  border-left: 3px solid;
+  padding: 14px 18px;
+  background: var(--bee-cell);
+  border-radius: 0 6px 6px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bee-info-ch-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.bee-info-ch-name {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.bee-info-ch-meta {
+  display: flex;
+  gap: 20px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--fg-muted);
+}
+
+.bee-info-ch-meta strong { color: var(--fg); }
+
+/* Noise sources */
+.bee-info-noise {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bee-info-noise-row {
+  display: grid;
+  grid-template-columns: 1fr 140px;
+  gap: 16px;
+  align-items: center;
+  padding: 14px;
+  background: var(--bee-cell);
+  border: 1px solid color-mix(in oklch, var(--bee) 12%, transparent);
+  border-radius: 8px;
+}
+
+.bee-info-noise-label {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bee);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.bee-info-noise-desc {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--fg-muted);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.bee-info-noise-meter-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bee-info-noise-meter-track {
+  height: 8px;
+  background: var(--bee-wall);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bee-info-noise-meter-fill {
+  height: 100%;
+  background: var(--bee-amber);
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+.bee-info-noise-sev {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--bee-deep);
+  text-align: right;
+}
+
+@media (max-width: 700px) {
+  .bee-info-noise-row { grid-template-columns: 1fr; }
+}
