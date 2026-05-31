@@ -2445,3 +2445,262 @@ section.act {
   .parrot-sig-compare-header,
   .parrot-sig-compare-row { grid-template-columns: 120px 1fr 1fr; }
 }
+
+/* ── Warble — Markov demo ──────────────────────────────────── */
+
+.parrot-warble-demo {
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.parrot-warble-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.parrot-warble-order-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.parrot-warble-order-tab {
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.parrot-warble-order-tab.active {
+  background: var(--parrot-wash);
+  border-color: color-mix(in oklch, var(--parrot) 40%, transparent);
+  color: var(--parrot);
+}
+
+.parrot-warble-el-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.parrot-warble-el-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-quiet);
+  letter-spacing: 0.06em;
+}
+
+.parrot-warble-el-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  border: 1.5px solid color-mix(in oklch, var(--el-color) 35%, transparent);
+  background: color-mix(in oklch, var(--el-color) 10%, transparent);
+  color: var(--el-color);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.parrot-warble-el-btn.active {
+  background: color-mix(in oklch, var(--el-color) 25%, transparent);
+  border-color: var(--el-color);
+  box-shadow: 0 0 8px color-mix(in oklch, var(--el-color) 30%, transparent);
+}
+
+.parrot-warble-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.parrot-warble-bar-row {
+  display: grid;
+  grid-template-columns: 20px 1fr 36px;
+  gap: 8px;
+  align-items: center;
+}
+
+.parrot-warble-bar-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.parrot-warble-bar-track {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.parrot-warble-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  opacity: 0.85;
+}
+
+.parrot-warble-bar-pct {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-quiet);
+  text-align: right;
+}
+
+.parrot-warble-demo-caption {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--fg-muted);
+  font-style: italic;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Warble — Chomsky hierarchy table ────────────────────── */
+
+.parrot-hier-table {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.parrot-hier-header,
+.parrot-hier-row {
+  display: grid;
+  grid-template-columns: 90px 200px 180px 1fr;
+  gap: 0;
+}
+
+.parrot-hier-header {
+  background: var(--bg-raised);
+  border-bottom: 1px solid var(--line-strong);
+  padding: 8px 14px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-quiet);
+  gap: 0;
+  column-gap: 0;
+}
+
+.parrot-hier-header > * { padding: 0 10px; }
+
+.parrot-hier-row {
+  border-bottom: 1px solid var(--line);
+  padding: 0;
+  transition: background 0.15s;
+}
+
+.parrot-hier-row:last-child { border-bottom: none; }
+
+.parrot-hier-row.blank {
+  background: color-mix(in oklch, var(--hier-color, #8ae04a) 6%, transparent);
+}
+
+.parrot-hier-level,
+.parrot-hier-class,
+.parrot-hier-auto,
+.parrot-hier-animal {
+  padding: 10px 14px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--fg-muted);
+  line-height: 1.45;
+  border-right: 1px solid var(--line);
+}
+
+.parrot-hier-animal { border-right: none; }
+
+.parrot-hier-row.blank .parrot-hier-level,
+.parrot-hier-row.blank .parrot-hier-class {
+  color: var(--hier-color, #8ae04a);
+  font-weight: 600;
+}
+
+.parrot-hier-wanted {
+  color: var(--hier-color, #8ae04a) !important;
+  font-weight: 700;
+  font-style: italic;
+}
+
+/* ── Warble — results selector ───────────────────────────── */
+
+.parrot-warble-results {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.parrot-warble-result-tabs {
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+}
+
+.parrot-warble-result-tab {
+  padding: 12px 14px;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: background 0.12s;
+}
+
+.parrot-warble-result-tab:last-child { border-bottom: none; }
+
+.parrot-warble-result-tab.active {
+  background: color-mix(in oklch, var(--res-color) 10%, transparent);
+  border-left: 3px solid var(--res-color);
+}
+
+.parrot-warble-result-year {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--res-color, var(--fg-quiet));
+}
+
+.parrot-warble-result-auth {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--fg-muted);
+  line-height: 1.35;
+}
+
+.parrot-warble-result-panel {
+  padding: 20px;
+  border-left: 3px solid transparent;
+  background: var(--bg-raised);
+}
+
+@media (max-width: 700px) {
+  .parrot-hier-header,
+  .parrot-hier-row { grid-template-columns: 80px 1fr; }
+  .parrot-hier-auto,
+  .parrot-hier-class { display: none; }
+  .parrot-warble-results { grid-template-columns: 1fr; }
+  .parrot-warble-result-tabs { flex-direction: row; overflow-x: auto; border-right: none; border-bottom: 1px solid var(--line); }
+  .parrot-warble-result-tab { border-bottom: none; border-right: 1px solid var(--line); min-width: 100px; }
+}
