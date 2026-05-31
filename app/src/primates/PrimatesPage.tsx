@@ -8,6 +8,7 @@ const SECTIONS = [
   { id: 'compositionality', label: 'Compositionality' },
   { id: 'gesture',         label: 'Gesture' },
   { id: 'vocalcontrol',    label: 'Vocal Control' },
+  { id: 'rsa',             label: 'RSA Model' },
 ] as const
 
 type SectionId = typeof SECTIONS[number]['id']
@@ -37,6 +38,10 @@ const SECTION_META: Record<SectionId, { title: string; blurb: string }> = {
     title: 'Vocal Control',
     blurb: 'The dual-pathway model (PAG affective vs. cortical volitional), Hage & Nieder vlPFC neurons, and the direct LMC→nucleus ambiguus projection unique to humans.',
   },
+  rsa: {
+    title: 'Bayesian Pragmatics',
+    blurb: 'Rational Speech Acts model: arousal-gradient likelihood, recursive L₀→S₁→L₁ recursion, and live comparison against Campbell\'s and titi monkey call corpora.',
+  },
 }
 
 const VALID_SECTIONS = new Set<string>(SECTIONS.map(s => s.id))
@@ -48,6 +53,7 @@ const SECTION_COMPONENTS: Partial<Record<SectionId, React.LazyExoticComponent<Re
   compositionality:  lazy(() => import('./sections/PrimateCompositionality').then(m => ({ default: m.PrimateCompositionality }))),
   gesture:           lazy(() => import('./sections/PrimateGesture').then(m => ({ default: m.PrimateGesture }))),
   vocalcontrol:      lazy(() => import('./sections/PrimateVocalControl').then(m => ({ default: m.PrimateVocalControl }))),
+  rsa:               lazy(() => import('./sections/PrimateRSA').then(m => ({ default: m.PrimateRSA }))),
 }
 
 function PrimateStub({ section }: { section: SectionId }) {
