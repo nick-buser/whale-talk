@@ -68,6 +68,7 @@ export function PrimatesPage() {
   const loc = useLocation()
   const onBirds = loc.pathname.startsWith('/birds')
   const onPrimates = loc.pathname.startsWith('/primates')
+  const onParrots = loc.pathname.startsWith('/parrots')
 
   const SectionComp = SECTION_COMPONENTS[section]
 
@@ -95,6 +96,13 @@ export function PrimatesPage() {
               className={onPrimates ? 'active' : ''}
             >
               Primates
+            </Link>
+            <Link
+              to="/parrots/$section"
+              params={{ section: 'intro' }}
+              className={onParrots ? 'active' : ''}
+            >
+              Parrots
             </Link>
           </div>
         </div>

@@ -2260,3 +2260,61 @@ section.act {
   .primate-gesture-layout { grid-template-columns: 1fr; }
   .primate-gesture-highlight { grid-template-columns: 80px 1fr; }
 }
+
+/* ============================================================
+   PARROTS TAB  (lime-green accent: #8ae04a)
+   ============================================================ */
+
+:root {
+  --parrot:      #8ae04a;
+  --parrot-deep: #4a8020;
+  --parrot-wash: color-mix(in oklch, #8ae04a 18%, transparent);
+}
+
+/* ── Stub (coming-soon placeholder) ───────────────────────── */
+
+.parrot-stub {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 560px;
+}
+
+.parrot-stub-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--parrot);
+  margin: 0;
+}
+
+.parrot-stub-title {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--fg);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.parrot-stub-blurb {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--fg-2);
+  margin: 0;
+}
+
+.parrot-stub-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  background: var(--parrot-wash);
+  color: var(--parrot);
+  width: fit-content;
+}
