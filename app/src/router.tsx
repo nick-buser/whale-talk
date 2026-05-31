@@ -4,6 +4,7 @@ import { BirdsPage } from './birds/BirdsPage'
 import { PrimatesPage } from './primates/PrimatesPage'
 import { ParrotsPage } from './parrots/ParrotsPage'
 import { BeesPage } from './bees/BeesPage'
+import { ElephantsPage } from './elephants/ElephantsPage'
 
 const rootRoute = createRootRoute({ component: () => <Outlet /> })
 
@@ -73,6 +74,21 @@ export const beesSectionRoute = createRoute({
   component: BeesPage,
 })
 
+// Redirect bare /elephants to /elephants/intro
+const elephantsIndexRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/elephants',
+  beforeLoad: () => {
+    throw redirect({ to: '/elephants/$section', params: { section: 'intro' } })
+  },
+})
+
+export const elephantsSectionRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/elephants/$section',
+  component: ElephantsPage,
+})
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   birdsIndexRoute,
@@ -83,6 +99,8 @@ const routeTree = rootRoute.addChildren([
   parrotsSectionRoute,
   beesIndexRoute,
   beesSectionRoute,
+  elephantsIndexRoute,
+  elephantsSectionRoute,
 ])
 
 export const router = createRouter({ routeTree })

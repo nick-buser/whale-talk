@@ -27,10 +27,11 @@ const NAV_ITEMS = [
 
 export function Chrome({ activeAct, audioOn, onAudioToggle, tweaksOpen, onTweaksToggle }: ChromeProps) {
   const loc = useLocation()
-  const onBirds    = loc.pathname.startsWith('/birds')
-  const onPrimates = loc.pathname.startsWith('/primates')
-  const onParrots  = loc.pathname.startsWith('/parrots')
-  const onBees     = loc.pathname.startsWith('/bees')
+  const onBirds     = loc.pathname.startsWith('/birds')
+  const onPrimates  = loc.pathname.startsWith('/primates')
+  const onParrots   = loc.pathname.startsWith('/parrots')
+  const onBees      = loc.pathname.startsWith('/bees')
+  const onElephants = loc.pathname.startsWith('/elephants')
 
   function scrollTo(id: string) {
     const el = document.getElementById(id)
@@ -74,6 +75,13 @@ export function Chrome({ activeAct, audioOn, onAudioToggle, tweaksOpen, onTweaks
             className={onBees ? 'active' : ''}
           >
             Bees
+          </Link>
+          <Link
+            to="/elephants/$section"
+            params={{ section: 'intro' }}
+            className={onElephants ? 'active' : ''}
+          >
+            Elephants
           </Link>
         </div>
       </div>
