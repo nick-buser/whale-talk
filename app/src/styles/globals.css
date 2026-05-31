@@ -2318,3 +2318,130 @@ section.act {
   color: var(--parrot);
   width: fit-content;
 }
+
+/* ── Signature calls — cross-fostering steps ───────────────── */
+
+.parrot-sig-steps {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  flex-wrap: wrap;
+}
+
+.parrot-sig-step-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  flex: 1 1 160px;
+  min-width: 0;
+}
+
+.parrot-sig-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: color-mix(in oklch, var(--sig-accent, #8ae04a) 7%, var(--abyss));
+  border: 1px solid color-mix(in oklch, var(--sig-accent, #8ae04a) 28%, transparent);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.parrot-sig-step-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--sig-accent, #8ae04a);
+  opacity: 0.75;
+}
+
+.parrot-sig-step-label {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg);
+  line-height: 1.3;
+}
+
+.parrot-sig-step-body {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--fg-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.parrot-sig-step-arrow {
+  align-self: center;
+  font-size: 16px;
+  color: var(--fg-quiet);
+  padding: 0 8px;
+  flex-shrink: 0;
+}
+
+/* ── Signature calls — comparison table ───────────────────── */
+
+.parrot-sig-compare {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.parrot-sig-compare-header,
+.parrot-sig-compare-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 1fr;
+}
+
+.parrot-sig-compare-header {
+  background: var(--bg-raised);
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.parrot-sig-compare-row {
+  border-bottom: 1px solid var(--line);
+}
+
+.parrot-sig-compare-row:last-child {
+  border-bottom: none;
+}
+
+.parrot-sig-compare-dim,
+.parrot-sig-compare-col,
+.parrot-sig-compare-cell {
+  padding: 10px 14px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.parrot-sig-compare-col {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.parrot-sig-compare-dim {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-quiet);
+  border-right: 1px solid var(--line);
+  align-content: center;
+}
+
+.parrot-sig-compare-cell {
+  color: var(--fg-muted);
+}
+
+.parrot-sig-compare-cell + .parrot-sig-compare-cell {
+  border-left: 1px solid var(--line);
+}
+
+@media (max-width: 700px) {
+  .parrot-sig-steps { flex-direction: column; }
+  .parrot-sig-step-arrow { transform: rotate(90deg); align-self: center; }
+  .parrot-sig-compare-header,
+  .parrot-sig-compare-row { grid-template-columns: 120px 1fr 1fr; }
+}
