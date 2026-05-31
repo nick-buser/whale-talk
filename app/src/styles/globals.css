@@ -5967,3 +5967,314 @@ section.act {
   .elephant-conv-hockett-head, .elephant-conv-hockett-row { grid-template-columns: 140px 70px 1fr; }
   .elephant-conv-finding-head { flex-wrap: wrap; }
 }
+
+/* ── RSA Bayesian Pragmatics section ──────────────────────────────── */
+
+.rsa-page-title {
+  font-family: var(--font-display);
+  font-size: var(--t-h1);
+  color: var(--fg);
+  margin: 0 0 16px;
+}
+
+/* System selector */
+.rsa-system-tabs {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.rsa-system-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 1.5px solid var(--stroke);
+  background: transparent;
+  color: var(--fg-muted);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s, background 0.12s;
+  text-align: left;
+}
+
+.rsa-system-tab:hover {
+  border-color: var(--krill);
+  color: var(--fg);
+}
+
+.rsa-system-tab.active {
+  border-color: var(--krill);
+  background: color-mix(in oklch, var(--krill) 8%, transparent);
+  color: var(--fg);
+}
+
+.rsa-system-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--fg-quiet);
+  letter-spacing: 0.02em;
+}
+
+/* Alpha control */
+.rsa-alpha-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.rsa-alpha-label {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg-muted);
+  white-space: nowrap;
+}
+
+.rsa-alpha-slider {
+  flex: 1;
+  min-width: 120px;
+  max-width: 280px;
+  accent-color: var(--krill);
+}
+
+.rsa-alpha-val {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--krill);
+  min-width: 36px;
+}
+
+.rsa-alpha-hint {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--fg-quiet);
+  font-style: italic;
+}
+
+/* Formula strip */
+.rsa-formula-strip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 16px 20px;
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  border-radius: 8px;
+  margin-bottom: 32px;
+}
+
+.rsa-formula-step {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rsa-formula-step--active .rsa-formula-name {
+  color: var(--krill);
+}
+
+.rsa-formula-name {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.rsa-formula-eq {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-quiet);
+}
+
+.rsa-formula-arrow {
+  font-size: 18px;
+  color: var(--fg-quiet);
+  padding: 0 4px;
+}
+
+/* Three-matrix grid */
+.rsa-matrices {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.rsa-matrix-panel {
+  border: 1px solid var(--stroke);
+  border-radius: 10px;
+  padding: 16px;
+  background: var(--surface);
+}
+
+.rsa-matrix-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 12px;
+}
+
+.rsa-matrix-title {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.rsa-matrix-formula {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--krill);
+}
+
+.rsa-matrix-note {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--fg-quiet);
+  line-height: 1.5;
+  margin: 12px 0 0;
+  border-top: 1px solid var(--stroke);
+  padding-top: 10px;
+}
+
+/* Legend */
+.rsa-matrix-legend,
+.rsa-compare-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin-bottom: 10px;
+}
+
+.rsa-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-muted);
+}
+
+.rsa-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* Stacked bars */
+.rsa-bar-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 36px;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.rsa-bar-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-muted);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.rsa-bar-track {
+  display: flex;
+  height: 14px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: var(--stroke);
+}
+
+.rsa-bar-seg {
+  height: 100%;
+  min-width: 2px;
+  transition: width 0.2s ease;
+}
+
+.rsa-bar-peak {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-align: right;
+}
+
+/* Observed vs model comparison */
+.rsa-compare {
+  margin-bottom: 40px;
+}
+
+.rsa-compare-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--fg);
+  margin: 0 0 6px;
+}
+
+.rsa-compare-sub {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--fg-muted);
+  margin: 0 0 16px;
+}
+
+.rsa-compare-block {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--stroke);
+}
+
+.rsa-compare-state-label {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.rsa-compare-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Callout */
+.rsa-callout {
+  padding: 20px 24px;
+  background: color-mix(in oklch, var(--krill) 6%, transparent);
+  border-left: 3px solid var(--krill);
+  border-radius: 0 8px 8px 0;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--fg-muted);
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.rsa-callout strong {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .rsa-matrices { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .rsa-bar-row { grid-template-columns: 80px 1fr 32px; }
+  .rsa-compare-block { grid-template-columns: 1fr; }
+  .rsa-formula-strip { flex-direction: column; align-items: flex-start; }
+}
