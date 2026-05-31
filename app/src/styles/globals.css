@@ -2704,3 +2704,287 @@ section.act {
   .parrot-warble-result-tabs { flex-direction: row; overflow-x: auto; border-right: none; border-bottom: 1px solid var(--line); }
   .parrot-warble-result-tab { border-bottom: none; border-right: 1px solid var(--line); min-width: 100px; }
 }
+
+/* ── Alex program — model/rival ──────────────────────────── */
+
+.parrot-alex-mr {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.parrot-alex-mr-steps {
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+}
+
+.parrot-alex-mr-step {
+  padding: 12px 14px;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: background 0.12s;
+}
+
+.parrot-alex-mr-step:last-child { border-bottom: none; }
+
+.parrot-alex-mr-step.active {
+  background: color-mix(in oklch, var(--mr-color) 10%, transparent);
+  border-left: 3px solid var(--mr-color);
+}
+
+.parrot-alex-mr-who {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mr-color, var(--fg-quiet));
+}
+
+.parrot-alex-mr-role {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--fg-muted);
+  line-height: 1.35;
+}
+
+.parrot-alex-mr-panel {
+  padding: 20px;
+  border-left: 3px solid transparent;
+  background: var(--bg-raised);
+}
+
+/* ── Alex program — capability categories ────────────────── */
+
+.parrot-alex-cats {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.parrot-alex-cat {
+  padding: 7px 14px;
+  border-radius: 6px;
+  border: 1px solid color-mix(in oklch, var(--cat-color) 30%, transparent);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  transition: all 0.12s;
+}
+
+.parrot-alex-cat.active {
+  background: color-mix(in oklch, var(--cat-color) 14%, transparent);
+  border-color: var(--cat-color);
+}
+
+.parrot-alex-cat-name {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cat-color);
+}
+
+.parrot-alex-cat-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-quiet);
+  letter-spacing: 0.06em;
+}
+
+.parrot-alex-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.parrot-alex-entry {
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 12px 14px;
+  border-left-width: 3px;
+  border-left-color: var(--cat-color);
+}
+
+.parrot-alex-entry--robust { border-left-color: var(--cat-color); }
+.parrot-alex-entry--strong { border-left-color: color-mix(in oklch, var(--cat-color) 55%, transparent); }
+.parrot-alex-entry--contested { border-left-color: #ff6b54; }
+
+.parrot-alex-entry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.parrot-alex-entry-label {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.parrot-alex-entry-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.parrot-alex-entry-badge--robust {
+  background: color-mix(in oklch, var(--cat-color) 15%, transparent);
+  color: var(--cat-color);
+}
+
+.parrot-alex-entry-badge--strong {
+  background: color-mix(in oklch, var(--cat-color) 10%, transparent);
+  color: color-mix(in oklch, var(--cat-color) 70%, var(--fg-muted));
+}
+
+.parrot-alex-entry-badge--contested {
+  background: color-mix(in oklch, #ff6b54 12%, transparent);
+  color: #ff6b54;
+}
+
+.parrot-alex-entry-ex {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--fg-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Alex program — number line ──────────────────────────── */
+
+.parrot-alex-numline {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.parrot-alex-num {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.parrot-alex-num-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.parrot-alex-num.trained .parrot-alex-num-circle {
+  background: color-mix(in oklch, #8ae04a 20%, transparent);
+  border: 2px solid #8ae04a;
+  color: #8ae04a;
+}
+
+.parrot-alex-num.inferred .parrot-alex-num-circle {
+  background: color-mix(in oklch, #ffb472 20%, transparent);
+  border: 2px dashed #ffb472;
+  color: #ffb472;
+}
+
+.parrot-alex-num-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.parrot-alex-num.trained .parrot-alex-num-tag { color: color-mix(in oklch, #8ae04a 65%, transparent); }
+.parrot-alex-num.inferred .parrot-alex-num-tag { color: color-mix(in oklch, #ffb472 65%, transparent); }
+
+/* ── Alex program — evidence assessment ─────────────────── */
+
+.parrot-alex-assess-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.parrot-alex-assess-tab {
+  padding: 7px 16px;
+  border-radius: 6px;
+  border: 1px solid color-mix(in oklch, var(--at-color) 35%, transparent);
+  background: transparent;
+  color: var(--fg-muted);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.parrot-alex-assess-tab.active {
+  background: color-mix(in oklch, var(--at-color) 14%, transparent);
+  color: var(--at-color);
+  border-color: var(--at-color);
+}
+
+.parrot-alex-assess-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.parrot-alex-assess-item {
+  border-radius: 7px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+}
+
+.parrot-alex-assess-item--established {
+  border-left: 3px solid #8ae04a;
+}
+
+.parrot-alex-assess-item--contested {
+  border-left: 3px solid #ff6b54;
+}
+
+.parrot-alex-assess-claim {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg);
+  margin: 0 0 8px;
+}
+
+.parrot-alex-assess-evidence {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--fg-muted);
+  line-height: 1.65;
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .parrot-alex-mr { grid-template-columns: 1fr; }
+  .parrot-alex-mr-steps { border-right: none; border-bottom: 1px solid var(--line); flex-direction: row; overflow-x: auto; }
+  .parrot-alex-mr-step { border-bottom: none; border-right: 1px solid var(--line); min-width: 110px; }
+}
