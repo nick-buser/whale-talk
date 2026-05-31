@@ -3579,3 +3579,207 @@ section.act {
   .bee-intro-stats { grid-template-columns: repeat(2, 1fr); }
   .bee-intro-grid { grid-template-columns: 1fr; }
 }
+
+/* ── Waggle Dance section ──────────────────────────────────── */
+
+.bee-waggle {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.bee-waggle-sim {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.bee-map-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  cursor: default;
+  border-radius: 6px;
+}
+
+.bee-dance-svg {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+}
+
+/* Slider */
+.bee-waggle-slider-row {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bee-waggle-slider-label {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--fg-muted);
+}
+
+.bee-waggle-slider-val {
+  color: var(--bee);
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+.bee-waggle-slider {
+  width: 100%;
+  accent-color: var(--bee);
+  cursor: pointer;
+}
+
+.bee-waggle-slider-ticks {
+  position: relative;
+  height: 16px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--bee-deep);
+}
+
+.bee-waggle-slider-ticks span {
+  position: absolute;
+  transform: translateX(-50%);
+}
+
+/* Play button */
+.bee-waggle-play {
+  display: block;
+  margin: 12px auto 0;
+  padding: 6px 18px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--bee);
+  background: transparent;
+  border: 1px solid color-mix(in oklch, var(--bee) 35%, transparent);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.bee-waggle-play:hover {
+  background: var(--bee-wash);
+  border-color: var(--bee);
+}
+
+/* Encoding table */
+.bee-waggle-encoding {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid color-mix(in oklch, var(--bee) 16%, transparent);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.bee-waggle-enc-head {
+  display: grid;
+  grid-template-columns: 100px 1fr 1fr 90px;
+  padding: 8px 14px;
+  background: var(--bee-wall);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bee-deep);
+  gap: 8px;
+}
+
+.bee-waggle-enc-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 1fr 90px;
+  padding: 9px 14px;
+  border-top: 1px solid color-mix(in oklch, var(--bee) 10%, transparent);
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--fg-muted);
+  gap: 8px;
+  align-items: center;
+}
+
+.bee-waggle-enc-ch {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bee);
+}
+
+.bee-waggle-enc-prec {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-quiet);
+}
+
+/* Metrics row */
+.bee-waggle-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.bee-waggle-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px;
+  background: var(--bee-cell);
+  border: 1px solid color-mix(in oklch, var(--bee) 16%, transparent);
+  border-radius: 8px;
+}
+
+.bee-waggle-metric-val {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--bee);
+  line-height: 1;
+}
+
+.bee-waggle-metric-label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--fg-muted);
+  line-height: 1.3;
+}
+
+/* Key */
+.bee-waggle-key {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.bee-waggle-key-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--fg-muted);
+}
+
+.bee-waggle-key-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+@media (max-width: 700px) {
+  .bee-waggle-sim { grid-template-columns: 1fr; }
+  .bee-waggle-metrics { grid-template-columns: repeat(2, 1fr); }
+  .bee-waggle-enc-head, .bee-waggle-enc-row { grid-template-columns: 80px 1fr 1fr; }
+  .bee-waggle-enc-head span:last-child, .bee-waggle-enc-row span:last-child { display: none; }
+}
