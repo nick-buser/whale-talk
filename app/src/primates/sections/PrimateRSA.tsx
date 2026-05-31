@@ -1,17 +1,21 @@
 import { useState, useMemo } from 'react'
 import {
   normalize,
-  literalListener, pragmaticSpeaker, pragmaticListener, arousalLikelihood,
+  literalListener, pragmaticSpeaker, pragmaticListener,
+  arousalLikelihood as computeArousalLikelihood,
+  logLikelihood, fit,
 } from '../../lib/rsa'
 import {
   CAMPBELLS_STATE_LABELS, CAMPBELLS_SIGNAL_LABELS, CAMPBELLS_AROUSAL_LABELS,
-  CAMPBELLS_OBSERVED, CAMPBELLS_LIKELIHOOD, CAMPBELLS_PRIOR,
+  CAMPBELLS_OBSERVED, CAMPBELLS_PRIOR,
   CAMPBELLS_AROUSAL_STATE, CAMPBELLS_AROUSAL_SIGNAL,
   TITI_STATE_LABELS, TITI_SIGNAL_LABELS,
   TITI_OBSERVED, TITI_LIKELIHOOD, TITI_PRIOR,
 } from '../../lib/rsa-data'
 
 type System = 'campbells' | 'titi'
+
+interface FitDisplay { alpha: number; logLik: number; S1: number[][] }
 
 /* ── Color palettes ──────────────────────────────────────────── */
 const C_STATE_COLORS = ['#ff6b54', '#b57bee', '#8ae04a', '#4afdc6']
@@ -72,31 +76,23 @@ function MatrixPanel({ title, formula, rows, rowLabels, colLabels, colColors, no
 
 /* ── WeightMatrix editor ─────────────────────────────────────── */
 function WeightMatrix({ title, rowLabels, colLabels, weights, onChange, normalizeBy }: {
-  title: string
-  rowLabels: readonly string[]
-  colLabels: readonly string[]
-  weights: number[][]
-  onChange: (row: number, col: number, val: number) => void
+  title: string; rowLabels: readonly string[]; colLabels: readonly string[]
+  weights: number[][]; onChange: (row: number, col: number, val: number) => void
   normalizeBy: 'rows' | 'columns'
 }) {
-  // Compute effective probabilities for display
   const effectiveProbs = useMemo((): number[][] => {
     if (normalizeBy === 'rows') return weights.map(normalize)
-    // column-normalize
     const nCols = weights[0]?.length ?? 0
     const colSums = Array.from({ length: nCols }, (_, j) =>
       weights.reduce((s, row) => s + (row[j] ?? 0), 0))
     return weights.map(row =>
       row.map((v, j) => colSums[j] === 0 ? 1 / weights.length : v / colSums[j]))
   }, [weights, normalizeBy])
-
   const nCols = colLabels.length
-  const gridCols = `80px repeat(${nCols}, 1fr)`
-
   return (
     <div className="rsa-weight-matrix">
       <span className="rsa-weight-title">{title}</span>
-      <div className="rsa-weight-grid" style={{ gridTemplateColumns: gridCols }}>
+      <div className="rsa-weight-grid" style={{ gridTemplateColumns: `80px repeat(${nCols}, 1fr)` }}>
         <span />
         {colLabels.map(l => <span key={l} className="rsa-weight-col-hdr">{l}</span>)}
         {weights.map((row, r) => (
@@ -106,9 +102,7 @@ function WeightMatrix({ title, rowLabels, colLabels, weights, onChange, normaliz
               <div key={`${r}-${c}`} className="rsa-weight-cell">
                 <input type="range" min="0" max="1" step="0.01" value={val}
                   onChange={e => onChange(r, c, parseFloat(e.target.value))} />
-                <span className="rsa-weight-pct">
-                  {(effectiveProbs[r][c] * 100).toFixed(0)}%
-                </span>
+                <span className="rsa-weight-pct">{(effectiveProbs[r][c] * 100).toFixed(0)}%</span>
               </div>
             ))}
           </>
@@ -120,16 +114,12 @@ function WeightMatrix({ title, rowLabels, colLabels, weights, onChange, normaliz
 
 /* ── LikelihoodHeatmap ───────────────────────────────────────── */
 function LikelihoodHeatmap({ likelihood, rowLabels, colLabels, colColors }: {
-  likelihood: number[][]
-  rowLabels: readonly string[]
-  colLabels: readonly string[]
-  colColors: string[]
+  likelihood: number[][]; rowLabels: readonly string[]
+  colLabels: readonly string[]; colColors: string[]
 }) {
   const nCols = colLabels.length
-  const gridCols = `80px repeat(${nCols}, 1fr)`
-
   return (
-    <div className="rsa-heatmap" style={{ gridTemplateColumns: gridCols }}>
+    <div className="rsa-heatmap" style={{ gridTemplateColumns: `80px repeat(${nCols}, 1fr)` }}>
       <span />
       {colLabels.map((l, i) => (
         <span key={i} className="rsa-heat-col-hdr" style={{ color: colColors[i] }}>{l}</span>
@@ -150,7 +140,7 @@ function LikelihoodHeatmap({ likelihood, rowLabels, colLabels, colColors }: {
   )
 }
 
-/* ── Alpha hint ─────────────────────────────────────────────── */
+/* ── Helpers ─────────────────────────────────────────────────── */
 function alphaHint(a: number): string {
   if (a < 0.3) return 'random — ignores informativeness'
   if (a < 1.5) return 'mild — slight preference for informative signals'
@@ -159,18 +149,20 @@ function alphaHint(a: number): string {
   return 'near-optimal — approaching deterministic argmax'
 }
 
+const ALPHA_GRID = Array.from({ length: 101 }, (_, i) => i * 0.1)  // 0.0 … 10.0
+
 /* ── Main export ─────────────────────────────────────────────── */
 export function PrimateRSA() {
   const [system, setSystem] = useState<System>('campbells')
   const [alpha, setAlpha] = useState(2)
   const [showArousal, setShowArousal] = useState(false)
+  const [fitResult, setFitResult] = useState<FitDisplay | null>(null)
 
-  // Editable arousal parameter weights (Campbell's only)
   const [asWeights, setAsWeights] = useState<number[][]>(
-    () => CAMPBELLS_AROUSAL_STATE.map(r => [...r]),   // P(arousal | state) — raw
+    () => CAMPBELLS_AROUSAL_STATE.map(r => [...r]),
   )
   const [sigWeights, setSigWeights] = useState<number[][]>(
-    () => CAMPBELLS_AROUSAL_SIGNAL.map(r => [...r]),  // signal-arousal affinities — raw
+    () => CAMPBELLS_AROUSAL_SIGNAL.map(r => [...r]),
   )
 
   const isC = system === 'campbells'
@@ -182,8 +174,18 @@ export function PrimateRSA() {
   const sigColors    = isC ? C_SIG_COLORS            : T_SIG_COLORS
 
   const derivedLikelihood = useMemo((): number[][] =>
-    isC ? arousalLikelihood(asWeights, sigWeights) : TITI_LIKELIHOOD
+    isC ? computeArousalLikelihood(asWeights, sigWeights) : TITI_LIKELIHOOD
   , [isC, asWeights, sigWeights])
+
+  // Arousal-only speaker: P(signal|state) straight from likelihood (no RSA)
+  const arousalOnlyS0 = useMemo((): number[][] =>
+    stateLabels.map((_, s) => signalLabels.map((_, u) => derivedLikelihood[u][s]))
+  , [derivedLikelihood, stateLabels, signalLabels])
+
+  const ll_arousal = useMemo(
+    () => logLikelihood(observed, arousalOnlyS0),
+    [observed, arousalOnlyS0],
+  )
 
   const { L0, S1, L1 } = useMemo(() => {
     const costs = new Array(signalLabels.length).fill(0)
@@ -195,14 +197,31 @@ export function PrimateRSA() {
 
   function updAs(r: number, c: number, v: number) {
     setAsWeights(prev => prev.map((row, ri) => ri === r ? row.map((x, ci) => ci === c ? v : x) : row))
+    setFitResult(null)  // stale after arousal edit
   }
   function updSig(r: number, c: number, v: number) {
     setSigWeights(prev => prev.map((row, ri) => ri === r ? row.map((x, ci) => ci === c ? v : x) : row))
+    setFitResult(null)
   }
   function resetArousal() {
     setAsWeights(CAMPBELLS_AROUSAL_STATE.map(r => [...r]))
     setSigWeights(CAMPBELLS_AROUSAL_SIGNAL.map(r => [...r]))
+    setFitResult(null)
   }
+  function switchSystem(s: System) {
+    setSystem(s)
+    setFitResult(null)
+  }
+
+  function runGridSearch() {
+    const costsGrid = [new Array(signalLabels.length).fill(0)]
+    const result = fit(observed, derivedLikelihood, prior, ALPHA_GRID, costsGrid)
+    setAlpha(result.alpha)   // snap slider to best-fit α
+    setFitResult({ alpha: result.alpha, logLik: result.logLik, S1: result.S1 })
+  }
+
+  const displayS1 = fitResult ? fitResult.S1 : S1
+  const displayAlpha = fitResult ? fitResult.alpha : alpha
 
   return (
     <div className="bird-act">
@@ -216,16 +235,17 @@ export function PrimateRSA() {
           A <em>literal listener</em> (L₀) inverts the arousal-gradient likelihood.
           A <em>pragmatic speaker</em> (S₁) chooses signals that maximize L₀ informativeness,
           weighted by rationality α. A <em>pragmatic listener</em> (L₁) inverts S₁.
-          Drag α to see sharpening live — then open the arousal editor to rewire the input likelihood.
+          Drag α to explore sharpening live — or press <strong>Fit α to data</strong> below
+          to grid-search the best-fitting rationality parameter against the field corpus.
         </p>
 
         {/* System tabs */}
         <div className="rsa-system-tabs" style={{ marginBottom: 32 }}>
-          <button className={`rsa-system-tab${isC ? ' active' : ''}`} onClick={() => setSystem('campbells')}>
+          <button className={`rsa-system-tab${isC ? ' active' : ''}`} onClick={() => switchSystem('campbells')}>
             Campbell's monkey
             <span className="rsa-system-sub">5 calls · 4 states · arousal model</span>
           </button>
-          <button className={`rsa-system-tab${!isC ? ' active' : ''}`} onClick={() => setSystem('titi')}>
+          <button className={`rsa-system-tab${!isC ? ' active' : ''}`} onClick={() => switchSystem('titi')}>
             Titi monkey
             <span className="rsa-system-sub">4 signals · 3 states · direct lexicon</span>
           </button>
@@ -236,7 +256,7 @@ export function PrimateRSA() {
           <span className="rsa-alpha-label">Rationality α</span>
           <input type="range" min="0" max="10" step="0.1" value={alpha}
             className="rsa-alpha-slider"
-            onChange={e => setAlpha(parseFloat(e.target.value))} />
+            onChange={e => { setAlpha(parseFloat(e.target.value)); setFitResult(null) }} />
           <span className="rsa-alpha-val">{alpha.toFixed(1)}</span>
           <span className="rsa-alpha-hint">{alphaHint(alpha)}</span>
         </div>
@@ -265,54 +285,37 @@ export function PrimateRSA() {
             <button className="rsa-arousal-toggle" onClick={() => setShowArousal(v => !v)}>
               <span className="rsa-arousal-caret">{showArousal ? '▾' : '▸'}</span>
               Arousal model — edit P(arousal|state) and P(signal|arousal)
-              {showArousal
-                ? <span className="rsa-arousal-badge">click to collapse</span>
-                : <span className="rsa-arousal-badge">click to expand</span>}
+              <span className="rsa-arousal-badge">{showArousal ? 'click to collapse' : 'click to expand'}</span>
             </button>
 
             {showArousal && (
               <div className="rsa-arousal-body">
                 <p className="rsa-arousal-desc">
-                  The likelihood P(signal|state) is derived by marginalizing over a latent arousal
-                  level: P(signal|state) = Σ_a P(signal|arousal=a) · P(arousal=a|state).
-                  Edit the slider weights below — normalization is applied automatically and the
-                  derived likelihood updates live.
+                  The likelihood P(signal|state) is derived by marginalizing over latent arousal:
+                  P(signal|state) = Σ_a P(signal|arousal=a) · P(arousal=a|state).
+                  Edit the slider weights — normalization is automatic; the derived likelihood and
+                  all RSA panels update live.
                 </p>
-
                 <div className="rsa-arousal-editors">
-                  <WeightMatrix
-                    title="P(arousal | state)  — rows normalized"
-                    rowLabels={CAMPBELLS_STATE_LABELS}
-                    colLabels={CAMPBELLS_AROUSAL_LABELS}
-                    weights={asWeights}
-                    onChange={updAs}
-                    normalizeBy="rows"
-                  />
+                  <WeightMatrix title="P(arousal | state)  — rows normalized"
+                    rowLabels={CAMPBELLS_STATE_LABELS} colLabels={CAMPBELLS_AROUSAL_LABELS}
+                    weights={asWeights} onChange={updAs} normalizeBy="rows" />
                   <div className="rsa-arousal-op">
                     <span>×</span>
                     <span className="rsa-arousal-op-sub">marginalise</span>
                   </div>
-                  <WeightMatrix
-                    title="P(signal | arousal)  — columns normalized"
-                    rowLabels={CAMPBELLS_SIGNAL_LABELS}
-                    colLabels={CAMPBELLS_AROUSAL_LABELS}
-                    weights={sigWeights}
-                    onChange={updSig}
-                    normalizeBy="columns"
-                  />
+                  <WeightMatrix title="P(signal | arousal)  — columns normalized"
+                    rowLabels={CAMPBELLS_SIGNAL_LABELS} colLabels={CAMPBELLS_AROUSAL_LABELS}
+                    weights={sigWeights} onChange={updSig} normalizeBy="columns" />
                 </div>
-
                 <div className="rsa-arousal-result">
                   <div className="rsa-arousal-result-head">
                     <span className="rsa-arousal-result-label">→ Derived P(signal | state)</span>
                     <button className="rsa-reset-btn" onClick={resetArousal}>Reset defaults</button>
                   </div>
-                  <LikelihoodHeatmap
-                    likelihood={derivedLikelihood}
-                    rowLabels={CAMPBELLS_SIGNAL_LABELS}
-                    colLabels={CAMPBELLS_STATE_LABELS}
-                    colColors={C_STATE_COLORS}
-                  />
+                  <LikelihoodHeatmap likelihood={derivedLikelihood}
+                    rowLabels={CAMPBELLS_SIGNAL_LABELS} colLabels={CAMPBELLS_STATE_LABELS}
+                    colColors={C_STATE_COLORS} />
                 </div>
               </div>
             )}
@@ -323,21 +326,59 @@ export function PrimateRSA() {
         <div className="rsa-matrices">
           <MatrixPanel title="L₀ · Literal Listener" formula="P(state | signal)"
             rows={L0} rowLabels={signalLabels} colLabels={stateLabels} colColors={stateColors}
-            note="Direct Bayesian inversion of the likelihood. No pragmatic reasoning — each signal maps to states proportionally to prior × likelihood." />
+            note="Bayesian inversion of the likelihood. No pragmatic reasoning — signals map to states proportionally to prior × likelihood." />
           <MatrixPanel title="S₁ · Pragmatic Speaker" formula="P(signal | state)"
             rows={S1} rowLabels={stateLabels} colLabels={signalLabels} colColors={sigColors}
-            note="Speaker maximizes L₀ informativeness. At high α, each state selects the signal that best discriminates it from all alternatives." />
+            note="Speaker maximizes L₀ informativeness. At high α, each state selects the signal that best discriminates it from alternatives." />
           <MatrixPanel title="L₁ · Pragmatic Listener" formula="P(state | signal)"
             rows={L1} rowLabels={signalLabels} colLabels={stateLabels} colColors={stateColors}
-            note="Listener inverts a pragmatic speaker. Sharper than L₀ — signals carry the extra information that S₁ chose them informatively." />
+            note="Inverts a pragmatic speaker. Sharper than L₀ — signals carry extra information because S₁ chose them informatively." />
         </div>
 
-        {/* Observed vs S₁ */}
+        {/* Fitting + comparison section */}
         <div className="rsa-compare">
-          <h3 className="rsa-compare-title">Observed production vs. S₁ prediction</h3>
+          <div className="rsa-fit-header">
+            <h3 className="rsa-compare-title">
+              {fitResult ? `Model comparison — best-fit α = ${fitResult.alpha.toFixed(1)}` : 'Observed vs. S₁'}
+            </h3>
+            <button className="rsa-fit-btn" onClick={runGridSearch}>
+              {fitResult ? '↺ Re-fit' : '▶ Fit α to data'}
+            </button>
+          </div>
+
           <p className="rsa-compare-sub">
-            Field-recorded call frequencies (Zuberbühler 2001; Berthet 2019) vs. S₁ at α = {alpha.toFixed(1)}.
+            {fitResult
+              ? `Grid search α ∈ [0, 10] step 0.1 against ${isC ? 'Zuberbühler 2001' : 'Berthet 2019'} corpus. Alpha slider snapped to best-fit. Three models compared below.`
+              : `${isC ? 'Zuberbühler 2001' : 'Berthet 2019'} production frequencies vs. S₁ at α = ${alpha.toFixed(1)}. Press "Fit α to data" to run grid search.`
+            }
           </p>
+
+          {/* Fit scores */}
+          {fitResult && (
+            <div className="rsa-fit-scores">
+              <div className="rsa-fit-score">
+                <span className="rsa-fit-score-label">Arousal-only logLik</span>
+                <span className="rsa-fit-score-val">{ll_arousal.toFixed(3)}</span>
+              </div>
+              <div className="rsa-fit-score rsa-fit-score--active">
+                <span className="rsa-fit-score-label">RSA best-fit logLik</span>
+                <span className="rsa-fit-score-val">{fitResult.logLik.toFixed(3)}</span>
+              </div>
+              <div className="rsa-fit-score">
+                <span className="rsa-fit-score-label">Δ logLik (RSA gain)</span>
+                <span className="rsa-fit-score-val"
+                  style={{ color: fitResult.logLik > ll_arousal ? 'var(--krill)' : 'var(--fg-quiet)' }}>
+                  {fitResult.logLik > ll_arousal ? '+' : ''}{(fitResult.logLik - ll_arousal).toFixed(3)}
+                </span>
+              </div>
+              <div className="rsa-fit-score">
+                <span className="rsa-fit-score-label">Best-fit α</span>
+                <span className="rsa-fit-score-val">{fitResult.alpha.toFixed(1)}</span>
+              </div>
+            </div>
+          )}
+
+          {/* Signal legend */}
           <div className="rsa-compare-legend">
             {signalLabels.map((l, i) => (
               <span key={i} className="rsa-legend-item">
@@ -345,12 +386,21 @@ export function PrimateRSA() {
               </span>
             ))}
           </div>
+
+          {/* Per-state bars — 2 rows before fit, 3 rows after */}
           {stateLabels.map((sl, s) => (
             <div key={s} className="rsa-compare-block">
               <span className="rsa-compare-state-label" style={{ color: stateColors[s] }}>{sl}</span>
               <div className="rsa-compare-rows">
-                <StackedBar label="Observed" values={observed[s]} colors={sigColors} dimLabel={signalLabels.join(' / ')} />
-                <StackedBar label="S₁ model" values={S1[s]}      colors={sigColors} dimLabel={signalLabels.join(' / ')} />
+                <StackedBar label="Observed"
+                  values={observed[s]} colors={sigColors} dimLabel={signalLabels.join(' / ')} />
+                {fitResult && (
+                  <StackedBar label="Arousal"
+                    values={arousalOnlyS0[s]} colors={sigColors} dimLabel={signalLabels.join(' / ')} />
+                )}
+                <StackedBar
+                  label={fitResult ? `RSA α=${displayAlpha.toFixed(1)}` : `S₁ α=${alpha.toFixed(1)}`}
+                  values={displayS1[s]} colors={sigColors} dimLabel={signalLabels.join(' / ')} />
               </div>
             </div>
           ))}
@@ -358,11 +408,22 @@ export function PrimateRSA() {
 
         {/* Callout */}
         <div className="rsa-callout">
-          <strong>Why the arousal layer matters:</strong> A plain RSA lexicon for Campbell's
-          would require a binary truth table. The arousal-gradient likelihood derives P(signal|state)
-          from a two-step marginalization over latent arousal — matching the graded nature of primate
-          call usage while staying parameter-sparse. Try editing the arousal model above: increase
-          "neighbor group → high arousal" weight and watch the L₀ boom-row sharpen toward eagle/leopard.
+          {fitResult
+            ? <>
+                <strong>Reading the fit:</strong> Δ logLik measures how much better the RSA
+                model explains observed production beyond the arousal-only baseline. A positive gain means
+                the data prefer a speaker reasoning about informativeness. For Campbell's, the best-fit
+                α typically falls in the 2–5 range — matching Schlenker et al.'s observation
+                that call semantics sharpen pragmatically relative to the raw arousal gradient.
+              </>
+            : <>
+                <strong>Why the arousal layer matters:</strong> A plain RSA lexicon for Campbell's
+                would require a binary truth table. The arousal-gradient likelihood derives P(signal|state)
+                from a two-step marginalization over latent arousal — matching the graded nature of primate
+                call usage while staying parameter-sparse. Press "Fit α to data" to see whether the
+                data require pragmatic sharpening on top of the arousal baseline.
+              </>
+          }
         </div>
       </div>
     </div>

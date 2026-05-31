@@ -6475,11 +6475,81 @@ section.act {
   border: 1px solid var(--stroke);
 }
 
+/* ── Fit header + button ─────────────────────────────────────── */
+
+.rsa-fit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.rsa-fit-btn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--fg);
+  background: color-mix(in oklch, var(--krill) 12%, var(--surface));
+  border: 1.5px solid var(--krill);
+  border-radius: 6px;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s;
+  white-space: nowrap;
+}
+
+.rsa-fit-btn:hover {
+  background: color-mix(in oklch, var(--krill) 20%, var(--surface));
+}
+
+/* ── Fit score cards ─────────────────────────────────────────── */
+
+.rsa-fit-scores {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.rsa-fit-score {
+  flex: 1;
+  min-width: 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  border-radius: 8px;
+}
+
+.rsa-fit-score--active {
+  border-color: var(--krill);
+  background: color-mix(in oklch, var(--krill) 6%, var(--surface));
+}
+
+.rsa-fit-score-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--fg-quiet);
+  letter-spacing: 0.02em;
+}
+
+.rsa-fit-score-val {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--fg);
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .rsa-matrices { grid-template-columns: 1fr; }
   .rsa-arousal-editors { flex-direction: column; }
   .rsa-arousal-op { flex-direction: row; padding-top: 0; }
+  .rsa-fit-scores { flex-direction: column; }
 }
 
 @media (max-width: 600px) {
