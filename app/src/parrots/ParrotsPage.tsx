@@ -66,10 +66,11 @@ export function ParrotsPage() {
   const { section: raw } = useParams({ strict: false }) as { section?: string }
   const section: SectionId = VALID_SECTIONS.has(raw ?? '') ? (raw as SectionId) : 'intro'
   const loc = useLocation()
-  const onBirds    = loc.pathname.startsWith('/birds')
-  const onPrimates = loc.pathname.startsWith('/primates')
-  const onParrots  = loc.pathname.startsWith('/parrots')
-  const onBees     = loc.pathname.startsWith('/bees')
+  const onBirds     = loc.pathname.startsWith('/birds')
+  const onPrimates  = loc.pathname.startsWith('/primates')
+  const onParrots   = loc.pathname.startsWith('/parrots')
+  const onBees      = loc.pathname.startsWith('/bees')
+  const onElephants = loc.pathname.startsWith('/elephants')
 
   const SectionComp = SECTION_COMPONENTS[section]
 
@@ -111,6 +112,13 @@ export function ParrotsPage() {
               className={onBees ? 'active' : ''}
             >
               Bees
+            </Link>
+            <Link
+              to="/elephants/$section"
+              params={{ section: 'intro' }}
+              className={onElephants ? 'active' : ''}
+            >
+              Elephants
             </Link>
           </div>
         </div>
