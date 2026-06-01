@@ -72,6 +72,7 @@ export function BeesPage() {
   const onBees      = loc.pathname.startsWith('/bees')
   const onElephants = loc.pathname.startsWith('/elephants')
   const onHuman     = loc.pathname.startsWith('/human')
+  const onLlm       = loc.pathname.startsWith('/llm')
 
   const SectionComp = SECTION_COMPONENTS[section]
 
@@ -127,6 +128,13 @@ export function BeesPage() {
               className={onHuman ? 'active' : ''}
             >
               Human
+            </Link>
+            <Link
+              to="/llm/$section"
+              params={{ section: 'intro' }}
+              className={onLlm ? 'active' : ''}
+            >
+              LLMs
             </Link>
           </div>
         </div>
