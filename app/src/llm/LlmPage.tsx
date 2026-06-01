@@ -86,6 +86,7 @@ export function LlmPage() {
   const onHuman     = loc.pathname.startsWith('/human')
   const onLlm       = loc.pathname.startsWith('/llm')
   const onFrontiers = loc.pathname.startsWith('/frontiers')
+  const onPets      = loc.pathname.startsWith('/pets')
 
   const SectionComp = SECTION_COMPONENTS[section]
 
@@ -123,6 +124,9 @@ export function LlmPage() {
             </Link>
             <Link to="/frontiers/$section" params={{ section: 'intro' }} className={onFrontiers ? 'active' : ''}>
               Frontiers
+            </Link>
+            <Link to="/pets/$section" params={{ section: 'intro' }} className={onPets ? 'active' : ''}>
+              Pets
             </Link>
           </div>
         </div>

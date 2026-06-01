@@ -35,6 +35,7 @@ export function Chrome({ activeAct, audioOn, onAudioToggle, tweaksOpen, onTweaks
   const onHuman     = loc.pathname.startsWith('/human')
   const onLlm       = loc.pathname.startsWith('/llm')
   const onFrontiers = loc.pathname.startsWith('/frontiers')
+  const onPets      = loc.pathname.startsWith('/pets')
 
   function scrollTo(id: string) {
     const el = document.getElementById(id)
@@ -106,6 +107,13 @@ export function Chrome({ activeAct, audioOn, onAudioToggle, tweaksOpen, onTweaks
             className={onFrontiers ? 'active' : ''}
           >
             Frontiers
+          </Link>
+          <Link
+            to="/pets/$section"
+            params={{ section: 'intro' }}
+            className={onPets ? 'active' : ''}
+          >
+            Pets
           </Link>
         </div>
       </div>
