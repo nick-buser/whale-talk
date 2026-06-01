@@ -7,6 +7,7 @@ import { BeesPage } from './bees/BeesPage'
 import { ElephantsPage } from './elephants/ElephantsPage'
 import { HumanPage } from './human/HumanPage'
 import { LlmPage } from './llm/LlmPage'
+import { FrontiersPage } from './frontiers/FrontiersPage'
 
 const rootRoute = createRootRoute({ component: () => <Outlet /> })
 
@@ -121,6 +122,21 @@ export const llmSectionRoute = createRoute({
   component: LlmPage,
 })
 
+// Redirect bare /frontiers to /frontiers/intro
+const frontiersIndexRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/frontiers',
+  beforeLoad: () => {
+    throw redirect({ to: '/frontiers/$section', params: { section: 'intro' } })
+  },
+})
+
+export const frontiersSectionRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/frontiers/$section',
+  component: FrontiersPage,
+})
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   birdsIndexRoute,
@@ -137,6 +153,8 @@ const routeTree = rootRoute.addChildren([
   humanSectionRoute,
   llmIndexRoute,
   llmSectionRoute,
+  frontiersIndexRoute,
+  frontiersSectionRoute,
 ])
 
 export const router = createRouter({ routeTree })
