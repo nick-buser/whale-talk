@@ -75,6 +75,7 @@ export function BeesPage() {
   const onLlm       = loc.pathname.startsWith('/llm')
   const onFrontiers = loc.pathname.startsWith('/frontiers')
   const onPets      = loc.pathname.startsWith('/pets')
+  const onWhales    = loc.pathname.startsWith('/whales') || loc.pathname === '/'
 
   const SectionComp = SECTION_COMPONENTS[section]
 
@@ -82,11 +83,11 @@ export function BeesPage() {
     <>
       <header className="chrome bee-chrome">
         <div className="chrome-left">
-          <Link to="/" className="brand">
+          <Link to="/whales/$section" params={{ section: 'hero' }} className="brand">
             <img src="/assets/mark.svg" alt="Sounding" />
           </Link>
           <div className="chrome-tabs">
-            <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: 'active' }}>
+            <Link to="/whales/$section" params={{ section: 'hero' }} className={onWhales ? 'active' : ''}>
               Whales
             </Link>
             <Link

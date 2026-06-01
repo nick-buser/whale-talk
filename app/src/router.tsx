@@ -1,5 +1,5 @@
 import { createRouter, createRoute, createRootRoute, Outlet, redirect } from '@tanstack/react-router'
-import App from './App'
+import { WhalesPage } from './whales/WhalesPage'
 import { BirdsPage } from './birds/BirdsPage'
 import { PrimatesPage } from './primates/PrimatesPage'
 import { ParrotsPage } from './parrots/ParrotsPage'
@@ -12,10 +12,28 @@ import { PetsPage } from './pets/PetsPage'
 
 const rootRoute = createRootRoute({ component: () => <Outlet /> })
 
+// Redirect bare / to /whales/hero
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
-  component: App,
+  beforeLoad: () => {
+    throw redirect({ to: '/whales/$section', params: { section: 'hero' } })
+  },
+})
+
+// Redirect bare /whales to /whales/hero
+const whalesIndexRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/whales',
+  beforeLoad: () => {
+    throw redirect({ to: '/whales/$section', params: { section: 'hero' } })
+  },
+})
+
+export const whalesSectionRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/whales/$section',
+  component: WhalesPage,
 })
 
 // Redirect bare /birds to /birds/intro
@@ -155,6 +173,8 @@ export const petsSectionRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
+  whalesIndexRoute,
+  whalesSectionRoute,
   birdsIndexRoute,
   birdsSectionRoute,
   primatesIndexRoute,
