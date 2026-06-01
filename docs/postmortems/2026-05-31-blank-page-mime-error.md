@@ -2,8 +2,8 @@
 
 - **Date of incident:** Discovered 2026-05-31; site had been broken since the first deploy on 2026-05-30.
 - **Date of writing:** 2026-05-31
-- **Status:** Resolved
-- **Severity:** High — the entire production site (https://whale-talk.nicholas-buser.workers.dev) rendered a blank page. 100% of visitors affected.
+- **Status:** Resolved (with a recurrence — see "Recurrence" below)
+- **Severity:** High — the entire production site (https://whale-talk.nicholas-buser.workers.dev) rendered a blank page. 100% of visitors affected. The same outage briefly **recurred** when a `git push` triggered a misconfigured auto-build.
 - **Authors:** Nick Buser, Claude
 - **This is a blameless postmortem.** The goal is to understand the system and our process, not to assign fault. The misdiagnoses below were reasonable given the information available at each step; documenting them is the whole point.
 
@@ -49,7 +49,9 @@ The fix: add a `wrangler.jsonc` that serves the **Vite build output** (`./dist`)
 | 2026-05-31 ~23:50 | First `wrangler deploy` attempt **uploads all assets but is rejected** at the final step: `Invalid _redirects configuration: Line 1: Infinite loop detected [code: 100324]`. |
 | 2026-05-31 23:52 | `_redirects` removed; `wrangler deploy` succeeds. Version `a9620c99`. |
 | 2026-05-31 23:5x | Verified live with headless Chromium: app mounts, deep links work, zero console errors. |
-| 2026-06-01 00:01 | Confirmed via `wrangler deployments list` that pushing to `main` did **not** create a new deployment → no Git auto-deploy is configured. |
+| 2026-06-01 ~00:00 | Pushed the fix (`9641d5a`) and postmortem (`9fde6ce`) to `main`. Checked `wrangler deployments list` immediately and saw no new deployment → **prematurely concluded there was no Git auto-deploy.** (Wrong: the build hadn't fired yet.) |
+| 2026-06-01 00:20 | A connected **Cloudflare Workers Build** fired on the push (deployment `c7f31c36`) and **re-broke the site** — it republished the source tree (`/src/main.tsx`, `/assets/` 404). The auto-build does **not** run `npm run build`. |
+| 2026-06-01 00:2x | Detected the recurrence via `curl` (served HTML showed `/src/main.tsx` again). Rebuilt and manually redeployed (`16b1e3a0`); re-verified healthy with headless Chromium. |
 
 ---
 
@@ -134,13 +136,19 @@ These are the takeaways most likely to save us next time.
 - `curl -sI https://site/assets/<bundle>.js` → confirm `content-type: text/javascript`. An empty/`text/html`/`text/jsx` type for a `.js`/module is the smoking gun.
 - A broken **homepage** (not just deep links) rules out SPA-routing causes — routing problems only affect sub-paths.
 
-### 6. There is no Git auto-deploy unless you wire it up
-- Pushing to GitHub does **not** redeploy this Worker. Confirmed: a push created no new deployment. This is why the `_redirects` commit on 2026-05-31 never had any effect — it was never deployed.
-- **Deploys are currently manual**, from `app/`:
+### 6. There IS a connected Git auto-build — and it was misconfigured (the recurrence)
+- A **Cloudflare Workers Build** is connected to the GitHub repo. Pushing to `main` **does** trigger a deploy — but after a **~20-minute lag**, which fooled us into briefly concluding (and writing in v1 of this doc) that no auto-deploy existed. **Lesson: don't conclude "no auto-deploy" from one immediate check; builds are asynchronous and can lag.**
+- The connected build was **misconfigured: it does not run `npm run build`.** It republished the source tree, re-introducing the original outage (`/src/main.tsx`, `/assets/` 404). So for a window, *pushing the fix actually re-broke production.*
+- Why the original `_redirects` commit (2026-05-31) appeared to "do nothing": it likely *was* auto-deployed, but since the deploy serves un-built source, no config change to a Worker build could have helped — the site was broken regardless.
+- **Correct Workers Build settings** (Dashboard → Workers & Pages → `whale-talk` → Settings → Build):
+  - **Root directory:** `app`
+  - **Build command:** `npm install && npm run build`
+  - **Deploy command:** `npx wrangler deploy` (this honors `app/wrangler.jsonc` → serves `./dist`)
+- **The mental model that prevents this whole class of bug:** the pipeline must *build, then deploy the build*. A deploy step alone (no build) will serve whatever is in the repo — which for a Vite app is un-compiled source.
+- Manual deploy remains available as the escape hatch, from `app/`:
   ```bash
   npm run build && npx wrangler deploy
   ```
-- To get push-to-deploy, connect **Cloudflare Workers Builds** to the GitHub repo (build command `npm run build`, root directory `app`, deploy from `dist`). Until then, treat deploy as a manual step.
 
 ---
 
@@ -150,9 +158,10 @@ These are the takeaways most likely to save us next time.
 |---|--------|------|-------|--------|
 | 1 | Commit `wrangler.jsonc` serving `./dist` with SPA fallback | Fix | — | ✅ Done (`9641d5a`) |
 | 2 | Remove broken `public/_redirects` | Fix | — | ✅ Done (`9641d5a`) |
-| 3 | Decide: connect Cloudflare Workers Builds for push-to-deploy, **or** document manual deploy as the official process | Prevent | Nick | ⬜ Open |
+| 3 | Fix the connected Workers Build: Root dir `app`, Build command `npm install && npm run build`, Deploy command `npx wrangler deploy` | Prevent | Nick | ⬜ Open (in progress) |
 | 4 | Add a one-line deploy section to the repo README (`npm run build && npx wrangler deploy` from `app/`) | Prevent | — | ⬜ Open |
-| 5 | (If auto-deploy) Add a post-deploy smoke check: `curl` the site and assert the served HTML references `/assets/` and the JS asset returns `text/javascript` | Detect | Nick | ⬜ Open |
+| 5 | Add a post-deploy smoke check: `curl` the site and assert the served HTML references `/assets/` (not `/src/main.tsx`) and the JS asset returns `text/javascript`. Run after every auto-build. | Detect | Nick | ⬜ Open |
+| 6 | After any `git push`, re-verify production after the auto-build completes (allow for build lag) before assuming it's healthy | Detect | Nick | ⬜ Open |
 
 ---
 
