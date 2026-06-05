@@ -1017,6 +1017,8 @@ section.act {
   scrollbar-width: none;
   border-right: 1px solid var(--line);
   padding: 28px 12px;
+  display: flex;
+  flex-direction: column;
 }
 
 .whale-sidebar::-webkit-scrollbar { display: none; }
@@ -1062,6 +1064,43 @@ section.act {
   min-width: 0;
 }
 
+/* Audio + tweaks controls, pinned to the bottom of the rail */
+.whale-sidebar-controls {
+  margin-top: auto;
+  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.whale-sidebar-controls .badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid color-mix(in oklch, var(--lumen) 35%, transparent);
+  border-radius: 999px; padding: 6px 12px;
+  font-family: var(--font-sans); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--lumen);
+  cursor: pointer; background: transparent;
+}
+.whale-sidebar-controls .badge::before {
+  content:''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--lumen);
+  box-shadow: 0 0 10px var(--lumen);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+.whale-sidebar-controls .badge.off { color: var(--mist); border-color: var(--line-strong); }
+.whale-sidebar-controls .badge.off::before { background: var(--shoal); box-shadow: none; animation: none; }
+
+.whale-sidebar-controls .twk-trigger {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 8px;
+  border: 1px solid var(--line-strong); background: transparent;
+  color: var(--shoal); cursor: pointer;
+  transition: color var(--dur-quick), border-color var(--dur-quick), background var(--dur-quick);
+}
+.whale-sidebar-controls .twk-trigger:hover { color: var(--foam); border-color: var(--shoal); }
+.whale-sidebar-controls .twk-trigger.active { color: var(--lumen); border-color: color-mix(in oklch, var(--lumen) 40%, transparent); background: color-mix(in oklch, var(--lumen) 8%, transparent); }
+
 @media (max-width: 768px) {
   .whale-layout { flex-direction: column; }
   .whale-sidebar {
@@ -1081,6 +1120,7 @@ section.act {
   }
   .whale-sidebar nav::-webkit-scrollbar { display: none; }
   .whale-sidebar nav a { white-space: nowrap; }
+  .whale-sidebar-controls { margin-top: 12px; padding-top: 0; }
 }
 
 .bird-layout {

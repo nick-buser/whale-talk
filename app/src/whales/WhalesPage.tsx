@@ -145,29 +145,7 @@ function WhalesPageInner() {
             </Link>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <button
-            className={`twk-trigger${tweaksOpen ? ' active' : ''}`}
-            onClick={() => setTweaksOpen(prev => !prev)}
-            aria-label="Toggle tweaks panel"
-            title="Tweaks (` key)"
-          >
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
-              <circle cx="7.5" cy="3" r="1.5" fill="currentColor"/>
-              <circle cx="7.5" cy="7.5" r="1.5" fill="currentColor"/>
-              <circle cx="7.5" cy="12" r="1.5" fill="currentColor"/>
-              <line x1="1" y1="3" x2="5.5" y2="3" stroke="currentColor" strokeWidth="1.2"/>
-              <line x1="9.5" y1="3" x2="14" y2="3" stroke="currentColor" strokeWidth="1.2"/>
-              <line x1="1" y1="7.5" x2="5.5" y2="7.5" stroke="currentColor" strokeWidth="1.2"/>
-              <line x1="9.5" y1="7.5" x2="14" y2="7.5" stroke="currentColor" strokeWidth="1.2"/>
-              <line x1="1" y1="12" x2="5.5" y2="12" stroke="currentColor" strokeWidth="1.2"/>
-              <line x1="9.5" y1="12" x2="14" y2="12" stroke="currentColor" strokeWidth="1.2"/>
-            </svg>
-          </button>
-          <button className={`badge${audioOn ? '' : ' off'}`} onClick={handleAudioToggle}>
-            <span className="lbl">Audio · {audioOn ? 'on' : 'off'}</span>
-          </button>
-        </div>
+        <div />
       </header>
 
       <TweaksPanel open={tweaksOpen} onClose={() => setTweaksOpen(false)} />
@@ -187,6 +165,30 @@ function WhalesPageInner() {
               </Link>
             ))}
           </nav>
+
+          <div className="whale-sidebar-controls">
+            <button className={`badge${audioOn ? '' : ' off'}`} onClick={handleAudioToggle}>
+              <span className="lbl">Audio · {audioOn ? 'on' : 'off'}</span>
+            </button>
+            <button
+              className={`twk-trigger${tweaksOpen ? ' active' : ''}`}
+              onClick={() => setTweaksOpen(prev => !prev)}
+              aria-label="Toggle tweaks panel"
+              title="Tweaks (` key)"
+            >
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+                <circle cx="7.5" cy="3" r="1.5" fill="currentColor"/>
+                <circle cx="7.5" cy="7.5" r="1.5" fill="currentColor"/>
+                <circle cx="7.5" cy="12" r="1.5" fill="currentColor"/>
+                <line x1="1" y1="3" x2="5.5" y2="3" stroke="currentColor" strokeWidth="1.2"/>
+                <line x1="9.5" y1="3" x2="14" y2="3" stroke="currentColor" strokeWidth="1.2"/>
+                <line x1="1" y1="7.5" x2="5.5" y2="7.5" stroke="currentColor" strokeWidth="1.2"/>
+                <line x1="9.5" y1="7.5" x2="14" y2="7.5" stroke="currentColor" strokeWidth="1.2"/>
+                <line x1="1" y1="12" x2="5.5" y2="12" stroke="currentColor" strokeWidth="1.2"/>
+                <line x1="9.5" y1="12" x2="14" y2="12" stroke="currentColor" strokeWidth="1.2"/>
+              </svg>
+            </button>
+          </div>
         </aside>
 
         <main className="whale-main">
