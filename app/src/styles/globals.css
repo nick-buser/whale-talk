@@ -966,8 +966,21 @@ section.act {
   /* Hide the giant sonar ring (920px wide, unscalable) */
   .act-hero .sonar { display: none; }
 
-  /* Compact chrome */
-  .chrome { padding: 14px 20px; }
+  /* Compact chrome + horizontally scrollable tab rail.
+     Without this the 10-tab pill overflows the viewport with no way to
+     reach the tabs past the fold (body has overflow-x:hidden). */
+  .chrome { padding: 12px 16px; gap: 12px; }
+  .chrome-left { flex: 1 1 auto; min-width: 0; gap: 12px; }
+  .chrome .brand { flex: 0 0 auto; }
+  .chrome-tabs {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .chrome-tabs::-webkit-scrollbar { display: none; }
+  .chrome-tabs a { flex: 0 0 auto; white-space: nowrap; }
   .chrome .nav { max-width: 52vw; }
   .chrome .nav a { padding: 5px 8px; font-size: 10px; letter-spacing: 0.1em; }
 }
@@ -1077,10 +1090,12 @@ section.act {
   .whale-sidebar-label { display: none; }
   .whale-sidebar nav {
     flex-direction: row;
+    overflow-x: auto;
+    scrollbar-width: none;
     gap: 4px;
   }
   .whale-sidebar nav::-webkit-scrollbar { display: none; }
-  .whale-sidebar nav a { white-space: nowrap; }
+  .whale-sidebar nav a { white-space: nowrap; flex: 0 0 auto; }
 }
 
 .bird-layout {
